@@ -7,11 +7,27 @@ var app = express();
 app.use(cors());
 const prisma = new PrismaClient();
 
-
 function jsonRead(data: any) {
-  return JSON.stringify(data, (_, v) =>
-    typeof v === "bigint" ? `${v}n` : v
-  ).replace(/"(-?\d+)n"/g, (_, a) => a);
+  if (data !== undefined) {
+    let intCount = 0,
+      repCount = 0;
+    const json = JSON.stringify(data, (_, v) => {
+      if (typeof v === "bigint") {
+        intCount++;
+        return `${v}#bigint`;
+      }
+      return v;
+    });
+    const res = json.replace(/"(-?\d+)#bigint"/g, (_, a) => {
+      repCount++;
+      return a;
+    });
+    if (repCount > intCount) {
+      // You have a string somewhere that looks like "123#bigint";
+      throw new Error(`BigInt serialization conflict with a string value.`);
+    }
+    return res;
+  }
 }
 // User
 app.get(
@@ -23,17 +39,20 @@ app.get(
         OR: { google_id: uid, facebook_id: uid },
       },
     });
-    console.log(allUser);
-    res.json({ users: jsonRead(allUser) });
   }
 );
 
 app.get(
   "/user/first",
   async function (req: Request, res: Response, next: NextFunction) {
-    const allUser = await prisma.users.findFirst();
-    console.log(allUser);
-    res.json({ users: jsonRead(allUser) });
+    const user = await prisma.users.findFirst();
+    console.log(user);
+    const allUserJson = jsonRead(user);
+    if (allUserJson == undefined) {
+      return res.status(500).json({ message: "Can't prase to json" });
+    }
+    console.log(user);
+    res.json({ users: JSON.parse(allUserJson) });
   }
 );
 app.get(
@@ -45,8 +64,12 @@ app.get(
         user_id: parseInt(user_id),
       },
     });
+    const allUsers = jsonRead(allUser);
+    if (allUsers == undefined) {
+      return res.status(500).json({ message: "Can't prase to json" });
+    }
     console.log(allUser);
-    res.json({ users: jsonRead(allUser) });
+    res.json({ users: JSON.parse(allUsers) });
   }
 );
 // Advice and exercise
@@ -55,7 +78,11 @@ app.get(
   async function (req: Request, res: Response, next: NextFunction) {
     const suggestion_categories = await prisma.suggestion_categories.findMany();
     console.log(suggestion_categories);
-    res.json({ users: jsonRead(suggestion_categories) });
+    const suggestion_categories_json = jsonRead(suggestion_categories);
+    if (suggestion_categories_json == undefined) {
+      return res.status(500).json({ message: "Can't prase to json" });
+    }
+    res.json({ users: JSON.parse(suggestion_categories_json) });
   }
 );
 app.get(
@@ -63,7 +90,11 @@ app.get(
   async function (req: Request, res: Response, next: NextFunction) {
     const suggestion_details = await prisma.suggestion_details.findMany();
     console.log(suggestion_details);
-    res.json({ users: jsonRead(suggestion_details) });
+    const suggestion_details_json = jsonRead(suggestion_details);
+    if (suggestion_details_json == undefined) {
+      return res.status(500).json({ message: "Can't prase to json" });
+    }
+    res.json({ users: JSON.parse(suggestion_details_json) });
   }
 );
 
@@ -73,7 +104,11 @@ app.get(
   async function (req: Request, res: Response, next: NextFunction) {
     const provinces = await prisma.provinces.findMany();
     console.log(provinces);
-    res.json({ users: jsonRead(provinces) });
+    const provinces_json = jsonRead(provinces);
+    if (provinces_json == undefined) {
+      return res.status(500).json({ message: "Can't prase to json" });
+    }
+    res.json({ users: JSON.parse(provinces_json) });
   }
 );
 app.get(
@@ -81,7 +116,11 @@ app.get(
   async function (req: Request, res: Response, next: NextFunction) {
     const regions = await prisma.regions.findMany();
     console.log(regions);
-    res.json({ users: jsonRead(regions) });
+    const regions_json = jsonRead(regions);
+    if (regions_json == undefined) {
+      return res.status(500).json({ message: "Can't prase to json" });
+    }
+    res.json({ users: JSON.parse(regions_json) });
   }
 );
 app.get(
@@ -89,7 +128,11 @@ app.get(
   async function (req: Request, res: Response, next: NextFunction) {
     const districts = await prisma.districts.findMany();
     console.log(districts);
-    res.json({ users: jsonRead(districts) });
+    const districts_json = jsonRead(districts);
+    if (districts_json == undefined) {
+      return res.status(500).json({ message: "Can't prase to json" });
+    }
+    res.json({ users: JSON.parse(districts_json) });
   }
 );
 app.get(
@@ -97,7 +140,12 @@ app.get(
   async function (req: Request, res: Response, next: NextFunction) {
     const allUser = await prisma.hospitals.findMany();
     console.log(allUser);
-    res.json({ users: jsonRead(allUser) });
+
+    const allUser_json = jsonRead(allUser);
+    if (allUser_json == undefined) {
+      return res.status(500).json({ message: "Can't prase to json" });
+    }
+    res.json({ users: JSON.parse(allUser_json) });
   }
 );
 // Hospital GET information
@@ -111,8 +159,12 @@ app.get(
       },
     });
     console.log(hospitals);
+    const hospitals_json = jsonRead(hospitals);
+    if (hospitals_json == undefined) {
+      return res.status(500).json({ message: "Can't prase to json" });
+    }
     res.json({
-      users: jsonRead(hospitals),
+      users: JSON.parse(hospitals_json),
       helper:
         "Regions id ภาคใต้:1, ภาคกลาง:2, ภาคกลาง(ปริมณฑล):3, ภาคตะวันออกเฉียงเหนือ:4, ภาคเหนือ:5",
     });
@@ -125,8 +177,12 @@ app.get(
   async function (req: Request, res: Response, next: NextFunction) {
     const screening_questions = await prisma.screening_questions.findMany();
     console.log(screening_questions);
+    const screening_questions_json = jsonRead(screening_questions);
+    if (screening_questions_json == undefined) {
+      return res.status(500).json({ message: "Can't prase to json" });
+    }
     res.json({
-      users: jsonRead(screening_questions),
+      users: JSON.parse(screening_questions_json),
       helper: "answered is collect by row 'collect' plus score by 1",
     });
   }
@@ -136,7 +192,11 @@ app.get(
   async function (req: Request, res: Response, next: NextFunction) {
     const screening_comments = await prisma.screening_comments.findMany();
     console.log(screening_comments);
-    res.json({ users: jsonRead(screening_comments) });
+    const screening_comments_json = jsonRead(screening_comments);
+    if (screening_comments_json == undefined) {
+      return res.status(500).json({ message: "Can't prase to json" });
+    }
+    res.json({ users: JSON.parse(screening_comments_json) });
   }
 );
 
@@ -149,9 +209,13 @@ app.get(
       },
       select: { screening_comments: true },
     });
-
+    console.log(screening_comments);
+    const screening_comments_json = jsonRead(screening_comments);
+    if (screening_comments_json == undefined) {
+      return res.status(500).json({ message: "Can't prase to json" });
+    }
     console.log(screening_comments.filter);
-    res.json({ users: jsonRead(screening_comments) });
+    res.json({ users: JSON.parse(screening_comments_json) });
   }
 );
 app.get(
@@ -177,9 +241,13 @@ app.get(
         ],
       },
     });
-
     console.log(screenings);
-    res.json({ users: jsonRead(screenings) });
+    const screenings_json = jsonRead(screenings);
+    if (screenings_json == undefined) {
+      return res.status(500).json({ message: "Can't prase to json" });
+    }
+    console.log(screenings);
+    res.json({ users: JSON.parse(screenings_json) });
   }
 );
 app.get(
@@ -191,28 +259,40 @@ app.get(
     console.log(comment);
     const highestIdComment = await prisma.screening_comments.findFirst({
       orderBy: {
-        id: 'desc',
+        id: "desc",
       },
-      select:{id:true}
+      select: { id: true },
     });
-    console.log(highestIdComment?.id)
+    console.log(highestIdComment?.id);
+    const highestIdComment_json = jsonRead(highestIdComment);
+    if (highestIdComment_json == undefined) {
+      return res.status(500).json({ message: "Can't prase to json" });
+    }
+    if (highestIdComment_json == null) {
+      return res.status(500).json({ message: "No history" });
+    }
+
     try {
       const newComment = await prisma.screening_comments.create({
         data: {
-          id: parseInt(jsonRead(highestIdComment?.id)) + 1,
+          id: parseInt(JSON.parse(highestIdComment_json)) + 1,
           comment: comment,
           screening_id: parseInt(screening_id),
           doctor_id: 1,
           created_at: "2023-04-29T12:31:11.844Z",
-          updated_at: "2023-04-29T12:31:11.844Z"
+          updated_at: "2023-04-29T12:31:11.844Z",
         },
       });
     } catch (error) {
       console.log(error);
-      res.status(500).json({ error: 'An error occurred while creating the screening comment.' });
+      res
+        .status(500)
+        .json({
+          error: "An error occurred while creating the screening comment.",
+        });
     }
     // comment: jsonRead(comment), id: jsonRead(screening_id),
-    res.json({  idLog:jsonRead(highestIdComment?.id)});
+    res.json({ idLog: jsonRead(highestIdComment?.id) });
     // const upsertComment = await prisma.screening_comments.upsert({
     //   where
     // });

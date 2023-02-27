@@ -171,10 +171,6 @@ model roles {
   users      users[]
 }
 
-// model schema_migrations {
-//   version String @id @db.VarChar
-// }
-
 model screening_comments {
   id           BigInt      @id @default(autoincrement())
   comment      String?     @db.VarChar
