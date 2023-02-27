@@ -10,8 +10,8 @@ datasource db {
 model ar_internal_metadata {
   key        String   @id @db.VarChar
   value      String?  @db.VarChar
-  created_at DateTime @db.Timestamp(6)
-  updated_at DateTime @db.Timestamp(6)
+  created_at DateTime @default(now()) @db.Timestamp(6)
+  updated_at DateTime @default(now()) @db.Timestamp(6)
 }
 
 model child_developers {
@@ -22,8 +22,8 @@ model child_developers {
   urine                      String?   @db.VarChar
   feces                      String?   @db.VarChar
   toilet_problem             String?   @db.VarChar
-  created_at                 DateTime  @db.Timestamp(6)
-  updated_at                 DateTime  @db.Timestamp(6)
+  created_at                 DateTime  @default(now()) @db.Timestamp(6)
+  updated_at                 DateTime  @default(now()) @db.Timestamp(6)
   toilet_problem_description String?   @db.VarChar
   p_eat                      String?   @db.VarChar
   eat_description            String?   @db.VarChar
@@ -46,8 +46,8 @@ model child_pregnancies {
   birth_after_effect             String?   @db.VarChar
   weight                         String?   @db.VarChar
   health                         String?   @db.VarChar
-  created_at                     DateTime  @db.Timestamp(6)
-  updated_at                     DateTime  @db.Timestamp(6)
+  created_at                     DateTime  @default(now()) @db.Timestamp(6)
+  updated_at                     DateTime  @default(now()) @db.Timestamp(6)
   pregnancy_description          String?   @db.VarChar
   birth_delay_description        String?   @db.VarChar
   birth_after_effect_description String?   @db.VarChar
@@ -69,11 +69,11 @@ model children {
   image_file_name    String?             @db.VarChar
   image_content_type String?             @db.VarChar
   image_file_size    Int?
-  image_updated_at   DateTime?           @db.Timestamp(6)
+  image_updated_at   DateTime?           @default(now()) @db.Timestamp(6)
   user_id            BigInt?
   gender_id          BigInt?
-  created_at         DateTime            @db.Timestamp(6)
-  updated_at         DateTime            @db.Timestamp(6)
+  created_at         DateTime            @default(now()) @db.Timestamp(6)
+  updated_at         DateTime            @default(now()) @db.Timestamp(6)
   total_child        Int?
   number_child       Int?
   child_developers   child_developers[]
@@ -90,8 +90,8 @@ model districts {
   id            BigInt          @id @default(autoincrement())
   name          String?         @db.VarChar
   province_id   BigInt?
-  created_at    DateTime        @db.Timestamp(6)
-  updated_at    DateTime        @db.Timestamp(6)
+  created_at    DateTime        @default(now()) @db.Timestamp(6)
+  updated_at    DateTime        @default(now()) @db.Timestamp(6)
   children      children[]
   provinces     provinces?      @relation(fields: [province_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   sub_districts sub_districts[]
@@ -101,12 +101,12 @@ model doctors {
   id                 BigInt               @id @default(autoincrement())
   hospital_id        BigInt?
   user_id            BigInt?
-  created_at         DateTime             @db.Timestamp(6)
-  updated_at         DateTime             @db.Timestamp(6)
+  created_at         DateTime             @default(now()) @db.Timestamp(6)
+  updated_at         DateTime             @default(now()) @db.Timestamp(6)
   image_file_name    String?              @db.VarChar
   image_content_type String?              @db.VarChar
   image_file_size    Int?
-  image_updated_at   DateTime?            @db.Timestamp(6)
+  image_updated_at   DateTime?            @default(now()) @db.Timestamp(6)
   first_name         String?              @db.VarChar
   last_name          String?              @db.VarChar
   hospitals          hospitals?           @relation(fields: [hospital_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -117,16 +117,16 @@ model doctors {
 model genders {
   id         BigInt     @id @default(autoincrement())
   name       String?    @db.VarChar
-  created_at DateTime   @db.Timestamp(6)
-  updated_at DateTime   @db.Timestamp(6)
+  created_at DateTime   @default(now()) @db.Timestamp(6)
+  updated_at DateTime   @default(now()) @db.Timestamp(6)
   children   children[]
 }
 
 model hospital_types {
   id         BigInt      @id @default(autoincrement())
   name       String?     @db.VarChar
-  created_at DateTime    @db.Timestamp(6)
-  updated_at DateTime    @db.Timestamp(6)
+  created_at DateTime    @default(now()) @db.Timestamp(6)
+  updated_at DateTime    @default(now()) @db.Timestamp(6)
   hospitals  hospitals[]
 }
 
@@ -137,8 +137,8 @@ model hospitals {
   lat              String?         @db.VarChar
   lng              String?         @db.VarChar
   hospital_type_id BigInt?
-  created_at       DateTime        @db.Timestamp(6)
-  updated_at       DateTime        @db.Timestamp(6)
+  created_at       DateTime        @default(now()) @db.Timestamp(6)
+  updated_at       DateTime        @default(now()) @db.Timestamp(6)
   region_id        BigInt?
   doctors          doctors[]
   hospital_types   hospital_types? @relation(fields: [hospital_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -148,8 +148,8 @@ model hospitals {
 model provinces {
   id            BigInt          @id @default(autoincrement())
   name          String?         @db.VarChar
-  created_at    DateTime        @db.Timestamp(6)
-  updated_at    DateTime        @db.Timestamp(6)
+  created_at    DateTime        @default(now()) @db.Timestamp(6)
+  updated_at    DateTime        @default(now()) @db.Timestamp(6)
   children      children[]
   districts     districts[]
   sub_districts sub_districts[]
@@ -158,16 +158,16 @@ model provinces {
 model regions {
   id         BigInt      @id @default(autoincrement())
   name       String?     @db.VarChar
-  created_at DateTime    @db.Timestamp(6)
-  updated_at DateTime    @db.Timestamp(6)
+  created_at DateTime    @default(now()) @db.Timestamp(6)
+  updated_at DateTime    @default(now()) @db.Timestamp(6)
   hospitals  hospitals[]
 }
 
 model roles {
   id         BigInt   @id @default(autoincrement())
   name       String?  @db.VarChar
-  created_at DateTime @db.Timestamp(6)
-  updated_at DateTime @db.Timestamp(6)
+  created_at DateTime @default(now()) @db.Timestamp(6)
+  updated_at DateTime @default(now())@db.Timestamp(6)
   users      users[]
 }
 
@@ -187,8 +187,8 @@ model screening_details {
   answered              Boolean?
   screening_id          BigInt?
   screening_question_id BigInt?
-  created_at            DateTime             @db.Timestamp(6)
-  updated_at            DateTime             @db.Timestamp(6)
+  created_at            DateTime             @default(now()) @db.Timestamp(6)
+  updated_at            DateTime             @default(now()) @db.Timestamp(6)
   screenings            screenings?          @relation(fields: [screening_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   screening_questions   screening_questions? @relation(fields: [screening_question_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
@@ -198,9 +198,9 @@ model screening_media {
   file_file_name    String?     @db.VarChar
   file_content_type String?     @db.VarChar
   file_file_size    Int?
-  file_updated_at   DateTime?   @db.Timestamp(6)
-  created_at        DateTime    @db.Timestamp(6)
-  updated_at        DateTime    @db.Timestamp(6)
+  file_updated_at   DateTime?   @default(now()) @db.Timestamp(6)
+  created_at        DateTime    @default(now()) @db.Timestamp(6)
+  updated_at        DateTime    @default(now()) @db.Timestamp(6)
   screening_id      BigInt?
   screenings        screenings? @relation(fields: [screening_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
@@ -211,8 +211,8 @@ model screening_questions {
   answered          Boolean?
   correct_score     Float?
   fail_answer       Float?
-  created_at        DateTime            @db.Timestamp(6)
-  updated_at        DateTime            @db.Timestamp(6)
+  created_at        DateTime            @default(now()) @db.Timestamp(6)
+  updated_at        DateTime            @default(now()) @db.Timestamp(6)
   screening_details screening_details[]
 }
 
@@ -221,8 +221,8 @@ model screening_results {
   name        String?      @db.VarChar
   max         Float?
   min         Float?
-  created_at  DateTime     @db.Timestamp(6)
-  updated_at  DateTime     @db.Timestamp(6)
+  created_at  DateTime     @default(now()) @db.Timestamp(6)
+  updated_at  DateTime     @default(now()) @db.Timestamp(6)
   description String?      @db.VarChar
   screenings  screenings[]
 }
@@ -232,8 +232,8 @@ model screenings {
   score               Float?
   child_id            BigInt?
   screening_result_id BigInt?
-  created_at          DateTime             @db.Timestamp(6)
-  updated_at          DateTime             @db.Timestamp(6)
+  created_at          DateTime             @default(now()) @db.Timestamp(6)
+  updated_at          DateTime             @default(now()) @db.Timestamp(6)
   is_guest            Boolean?             @default(false)
   screening_comments  screening_comments[]
   screening_details   screening_details[]
@@ -247,8 +247,8 @@ model sessions {
   user_id      BigInt?
   access_token String?  @db.VarChar
   is_active    Boolean?
-  created_at   DateTime @db.Timestamp(6)
-  updated_at   DateTime @db.Timestamp(6)
+  created_at   DateTime @default(now()) @db.Timestamp(6)
+  updated_at   DateTime @default(now()) @db.Timestamp(6)
   users        users?   @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
@@ -258,8 +258,8 @@ model sub_districts {
   province_id BigInt?
   district_id BigInt?
   zip_code    Int?
-  created_at  DateTime   @db.Timestamp(6)
-  updated_at  DateTime   @db.Timestamp(6)
+  created_at  DateTime   @default(now()) @db.Timestamp(6)
+  updated_at  DateTime   @default(now()) @db.Timestamp(6)
   children    children[]
   districts   districts? @relation(fields: [district_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   provinces   provinces? @relation(fields: [province_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -268,8 +268,8 @@ model sub_districts {
 model suggestion_categories {
   id                 BigInt               @id @default(autoincrement())
   name               String?              @db.VarChar
-  created_at         DateTime             @db.Timestamp(6)
-  updated_at         DateTime             @db.Timestamp(6)
+  created_at         DateTime             @default(now()) @db.Timestamp(6)
+  updated_at         DateTime             @default(now()) @db.Timestamp(6)
   suggestion_details suggestion_details[]
 }
 
@@ -280,10 +280,10 @@ model suggestion_details {
   image_file_name        String?                @db.VarChar
   image_content_type     String?                @db.VarChar
   image_file_size        Int?
-  image_updated_at       DateTime?              @db.Timestamp(6)
+  image_updated_at       DateTime?              @default(now()) @db.Timestamp(6)
   suggestion_category_id BigInt?
-  created_at             DateTime               @db.Timestamp(6)
-  updated_at             DateTime               @db.Timestamp(6)
+  created_at             DateTime               @default(now()) @db.Timestamp(6)
+  updated_at             DateTime               @default(now()) @db.Timestamp(6)
   image_url              String?                @db.VarChar
   suggestion_categories  suggestion_categories? @relation(fields: [suggestion_category_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
@@ -295,8 +295,8 @@ model users {
   role_id          BigInt?
   facebook_id      String?    @db.VarChar
   google_id        String?    @db.VarChar
-  created_at       DateTime   @db.Timestamp(6)
-  updated_at       DateTime   @db.Timestamp(6)
+  created_at       DateTime   @default(now()) @db.Timestamp(6)
+  updated_at       DateTime   @default(now()) @db.Timestamp(6)
   children         children[]
   doctors          doctors[]
   sessions         sessions[]
