@@ -10,7 +10,7 @@ app.use(cors());
 const prisma = new PrismaClient();
 
 router.get(
-    "/location/province",
+    "/province",
     async function (req: Request, res: Response, next: NextFunction) {
       const provinces = await prisma.provinces.findMany();
       console.log(provinces);
@@ -18,11 +18,11 @@ router.get(
       if (provinces_json == undefined) {
         return res.status(500).json({ message: "Can't prase to json" });
       }
-      res.json({ users: JSON.parse(provinces_json) });
+      res.json({ province: JSON.parse(provinces_json) });
     }
   );
   router.get(
-    "/location/regions",
+    "/regions",
     async function (req: Request, res: Response, next: NextFunction) {
       const regions = await prisma.regions.findMany();
       console.log(regions);
@@ -30,11 +30,11 @@ router.get(
       if (regions_json == undefined) {
         return res.status(500).json({ message: "Can't prase to json" });
       }
-      res.json({ users: JSON.parse(regions_json) });
+      res.json({ regions: JSON.parse(regions_json) });
     }
   );
   router.get(
-    "/location/districts",
+    "/districts",
     async function (req: Request, res: Response, next: NextFunction) {
       const districts = await prisma.districts.findMany();
       console.log(districts);
@@ -42,7 +42,7 @@ router.get(
       if (districts_json == undefined) {
         return res.status(500).json({ message: "Can't prase to json" });
       }
-      res.json({ users: JSON.parse(districts_json) });
+      res.json({ districts: JSON.parse(districts_json) });
     }
   );
   export default router;

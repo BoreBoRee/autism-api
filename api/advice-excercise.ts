@@ -4,13 +4,10 @@ import jsonRead from './json-read-format';
 
 var express = require("express");
 var router = express.Router();
-var cors = require("cors");
-var app = express();
-app.use(cors());
 const prisma = new PrismaClient();
 
 router.get(
-    "/advice-categories",
+    "/categories",
     async function (req: Request, res: Response, next: NextFunction) {
       const suggestion_categories = await prisma.suggestion_categories.findMany();
       console.log(suggestion_categories);
@@ -22,7 +19,7 @@ router.get(
     }
   );
   router.get(
-    "/advice-content",
+    "/content",
     async function (req: Request, res: Response, next: NextFunction) {
       const suggestion_details = await prisma.suggestion_details.findMany();
       console.log(suggestion_details);
