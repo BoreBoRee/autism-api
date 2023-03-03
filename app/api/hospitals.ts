@@ -12,14 +12,14 @@ const prisma = new PrismaClient();
 router.get(
     "/hospitals-information",
     async function (req: Request, res: Response, next: NextFunction) {
-      const allUser = await prisma.hospitals.findMany();
-      console.log(allUser);
+      const hospitals = await prisma.hospitals.findMany();
+      console.log(hospitals);
   
-      const allUser_json = jsonRead(allUser);
-      if (allUser_json == undefined) {
+      const hospitals_json = jsonRead(hospitals);
+      if (hospitals_json == undefined) {
         return res.status(500).json({ message: "Can't prase to json" });
       }
-      res.json({ users: JSON.parse(allUser_json) });
+      res.json({ users: JSON.parse(hospitals_json) });
     }
   );
   // Hospital GET information

@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+
 import { PrismaClient } from "@prisma/client";
 import advice_excercise from './advice-excercise';
 import analyze_doctor from './analyze-doctor';
