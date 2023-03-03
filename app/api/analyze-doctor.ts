@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { PrismaClient } from "@prisma/client";
 import jsonRead from './json-read-format';
 
+const timestamp =Date.now();
 var express = require("express");
 var router = express.Router();
 const prisma = new PrismaClient();
@@ -62,6 +63,7 @@ router.get(
     async function (req: Request, res: Response, next: NextFunction) {
       const comment = req.params.comment;
       const screening_id = req.params.uid;
+      
       // const time = String(DateTime)
       console.log(comment);
       const highestIdComment = await prisma.screening_comments.findFirst({
