@@ -45,4 +45,16 @@ router.get(
       res.json({ districts: JSON.parse(districts_json) });
     }
   );
+  router.get(
+    "/sub_districts",
+    async function (req: Request, res: Response, next: NextFunction) {
+      const sub_districts = await prisma.sub_districts.findMany();
+      console.log(sub_districts);
+      const sub_districts_json = jsonRead(sub_districts);
+      if (sub_districts_json == undefined) {
+        return res.status(500).json({ message: "Can't prase to json" });
+      }
+      res.json({ sub_districts: JSON.parse(sub_districts_json) });
+    }
+  );
   export default router;
