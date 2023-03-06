@@ -55,7 +55,7 @@ router.get(
         return res.status(500).json({ message: "Can't prase to json" });
       }
       console.log(screenings);
-      res.json({ users: JSON.parse(screenings_json) });
+      res.json({ screenings_json: JSON.parse(screenings_json) });
     }
   );
   router.get(

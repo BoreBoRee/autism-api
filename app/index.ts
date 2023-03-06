@@ -8,7 +8,7 @@ import location from './api/location';
 import questionnaire from './api/questionnaire';
 import user_auth from './api/user-auth';
 import demo from './api/add-demo-accout';
-const prisma = new PrismaClient()
+
 
 var express = require("express");
 var cors = require("cors");
@@ -26,6 +26,32 @@ async function main() {
     app.use('/user-auth', user_auth)
     app.use('/demo', demo)
 }
+const prisma = new PrismaClient({
+  log: [
+    {
+      emit: 'event',
+      level: 'query',
+    },
+    {
+      emit: 'stdout',
+      level: 'error',
+    },
+    {
+      emit: 'stdout',
+      level: 'info',
+    },
+    {
+      emit: 'stdout',
+      level: 'warn',
+    },
+  ],
+})
+
+prisma.$on('query', (e) => {
+  console.log('Query: ' + e.query)
+  console.log('Params: ' + e.params)
+  console.log('Duration: ' + e.duration + 'ms')
+})
 
 main()
   .then(async () => {

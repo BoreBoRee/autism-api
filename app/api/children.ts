@@ -16,22 +16,22 @@ router.get(
     "/childe/:userId",
     async function (req: Request, res: Response, next: NextFunction) {
       const user_id = req.params.userId;
-      const allUser = await prisma.children.findMany({
+      const children = await prisma.children.findMany({
         where: {
           user_id: parseInt(user_id),
         },
       });
-      const allUsers = jsonRead(allUser);
-      if (allUsers == undefined) {
+      const children_json = jsonRead(children);
+      if (children_json == undefined) {
         return res.status(500).json({ message: "Can't prase to json" });
       }
-      console.log(allUser);
-      res.json({ users: JSON.parse(allUsers) });
+      console.log(children_json);
+      res.json({ children: JSON.parse(children_json) });
     }
   );
   
   router.get(
-    "/add-child/:name/:uid/:birthday/:address/:province/:district/:sub_district/:zip_code/:image/:gender_id/:total_child/:number_child/:",
+    "/add-child/:name/:uid/:birthday/:address/:province/:district/:sub_district/:zip_code/:image/:gender_id/:total_child/:number_child/",
     async function (req: Request, res: Response, next: NextFunction) {
       const comment = req.params.comment;
       const child_name = req.params.name;

@@ -15,7 +15,7 @@ router.get(
       if (suggestion_categories_json == undefined) {
         return res.status(500).json({ message: "Can't prase to json" });
       }
-      res.json({ users: JSON.parse(suggestion_categories_json) });
+      res.json({ categories: JSON.parse(suggestion_categories_json) });
     }
   );
   router.get(
@@ -27,7 +27,7 @@ router.get(
       if (suggestion_details_json == undefined) {
         return res.status(500).json({ message: "Can't prase to json" });
       }
-      res.json({ users: JSON.parse(suggestion_details_json) });
+      res.json({ content: JSON.parse(suggestion_details_json) });
     }
   );
 export default router;
