@@ -7,6 +7,7 @@ import hospitals from './api/hospitals';
 import location from './api/location';
 import questionnaire from './api/questionnaire';
 import user_auth from './api/user-auth';
+import media from './api/media';
 import demo from './api/add-demo-accout';
 
 
@@ -25,6 +26,7 @@ async function main() {
     app.use('/questionnaire', questionnaire)
     app.use('/user-auth', user_auth)
     app.use('/demo', demo)
+    app.use('/media', media)
 }
 const prisma = new PrismaClient({
   log: [

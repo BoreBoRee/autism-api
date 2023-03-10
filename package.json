@@ -17,6 +17,7 @@
     },
     "dependencies": {
         "@prisma/client": "^4.11.0",
-        "prisma": "^4.11.0"
+        "prisma": "^4.11.0",
+        "prisma-field-encryption": "^1.4.1"
     }
 }
