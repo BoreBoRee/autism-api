@@ -88,8 +88,7 @@ router.get(
             comment: comment,
             screening_id: parseInt(screening_id),
             doctor_id: 1,
-            created_at: "2023-04-29T12:31:11.844Z",
-            updated_at: "2023-04-29T12:31:11.844Z",
+           
           },
         });
       } catch (error) {
@@ -103,6 +102,29 @@ router.get(
 
       res.json({ idLog: jsonRead(highestIdComment?.id) });
 
+    }
+  );
+  router.get(
+    "/analyze-send/:user_id/:child-id/:score/:information",
+    async function (req: Request, res: Response, next: NextFunction) {
+      const user_id = req.params.user_id;
+      const child_id = req.params.child_id;
+      const score = req.params.score;
+      const information = req.params.information;
+      const screening_comments = await prisma.screening_comments.create({
+        data:{ 
+          child_id: parseInt(child_id), 
+          screening_id: parseInt(user_id),
+          information: information,
+          score: parseInt(score), 
+          doctor_id: null,
+          comment: null
+        
+      });
+      
+      const screening_info = `Send Child ${child_id} to doctor of this information ${information} score ${score}}`;
+      console.log(screening_info)
+      res.json({ screening_info: screening_info });
     }
   );
   export default router;

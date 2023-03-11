@@ -10,22 +10,11 @@ var app = express();
 app.use(cors());
 const prisma = new PrismaClient();
 
-router.get(
-  "/users-uid/:uid",
-  async function (req: Request, res: Response, next: NextFunction) {
-    const uid = req.params.uid;
-    const allUser = await prisma.users.findMany({
-      where: {
-        OR: { google_id: uid, facebook_id: uid },
-      },
-    });
-  }
-);
 
 router.get(
-  "/user/first",
+  "/user/all",
   async function (req: Request, res: Response, next: NextFunction) {
-    const user = await prisma.users.findFirst();
+    const user = await prisma.users.findMany();
     console.log(user);
     const allUserJson = jsonRead(user);
     if (allUserJson == undefined) {
@@ -36,11 +25,12 @@ router.get(
   }
 );
 router.get(
-  "/facebook-login/:uid/:username",
+  "/facebook-login/:uid/:username/:email",
   async function (req: Request, res: Response, next: NextFunction) {
     const username = req.params.username;
     const uid = req.params.uid;
     const provider = "facebook";
+    const email = req.params.email;
     var user_json = JSON.parse("{}");
     var userStatus = "";
     var addUser = "";
@@ -57,6 +47,7 @@ router.get(
       userStatus = "not exist";
       const adduser = await prisma.users.create({
         data: {
+          user_contact:email,
           username: username,
           facebook_id: uid,
           role_id: 1,
@@ -82,12 +73,13 @@ router.get(
 );
 
 router.get(
-  "/google-login/:uid/:username",
+  "/google-login/:uid/:username/:email",
   async function (req: Request, res: Response, next: NextFunction) {
     var user_json = JSON.parse("{}");
     const username = req.params.username;
     const uid = req.params.uid;
     const provider = "google";
+    const email = req.params.email;
     var userStatus = "";
     var addUser = "";
     const user = await prisma.users.findMany({
@@ -102,6 +94,7 @@ router.get(
       userStatus = "not exist";
       const adduser = await prisma.users.create({
         data: {
+          user_contact:email,
           username: username,
           google_id: uid,
           role_id: 1,
@@ -127,11 +120,13 @@ router.get(
 );
 
 router.get(
-  "/email-login/:uid/:username",
+  "/email-login/:uid/:username/:email",
   async function (req: Request, res: Response, next: NextFunction) {
     var user_json = JSON.parse("{}");
     const username = req.params.username;
     const uid = req.params.uid;
+    
+    const email = "email";
     const provider = "email";
     var userStatus = "";
     var addUser = "";
@@ -147,6 +142,7 @@ router.get(
       userStatus = "not exist";
       const adduser = await prisma.users.create({
         data: {
+          user_contact:email,
           username: username,
           email_id: uid,
           role_id: 3,
