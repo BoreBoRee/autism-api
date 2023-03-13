@@ -145,7 +145,7 @@ router.get(
           user_contact:email,
           username: username,
           email_id: uid,
-          role_id: 3,
+          role_id: 1,
         },
       });
       const user = await prisma.users.findMany({
@@ -194,6 +194,35 @@ router.get(
         .then(console.log);
     }
     res.json({ delete_user: { uid }, provider: { provider } });
+  }
+);
+
+router.get(
+  "/guest-login/",
+  async function (req: Request, res: Response, next: NextFunction) {
+    const getID = await prisma.users.findMany({
+      select:{
+        id: true
+      },
+      orderBy:{
+        id:'desc'
+      },
+      take:1
+    })
+    const getID_json = jsonRead(getID);
+    const ID = Number(getID[0]['id']) + 1
+    if (getID_json == undefined) {
+      return res.status(500).json({ message: "Can't prase to json" });
+    }
+    const adduser = await prisma.users.create({
+      data: {
+        username: `Guest#${ID}`,
+        role_id: 4,
+      },
+    });
+    res.json({
+    status:"guest Login",
+    guestName:`Guest#${ID}`, guestID: ID});
   }
 );
 
