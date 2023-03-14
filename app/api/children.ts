@@ -50,6 +50,7 @@ router.get(
 
     // const time = String(DateTime)
     console.log(comment);
+    
 
     try {
       const newComment = await prisma.children.create({
@@ -76,8 +77,21 @@ router.get(
         error: "An error occurred while creating the screening comment.",
       });
     }
+    const get_chld_ID = await prisma.children.findMany({
+      where:{
+        name:child_name
+      },
+      select:{
+        id: true
+      },
+      orderBy:{
+        id:'desc'
+      },
+      take:1
+    })
+    const only_id = get_chld_ID[0].id
 
-    res.json({ Status: `Add child success information` });
+    res.json({ Status: `Add child success information`, child_id:only_id});
   }
 );
 router.get(
