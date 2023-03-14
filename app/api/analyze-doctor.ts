@@ -125,4 +125,45 @@ router.get(
     res.json({ screening_info: screening_info });
   }
 );
+//create read doctor information
+router.get(
+  "/analyze_doctor/:doctor_id",
+  async function (req: Request, res: Response, next: NextFunction) {
+    const doctor_id = req.params.doctor_id;
+    const doctor = await prisma.doctors.findUnique({
+      where: {
+        id: parseInt(doctor_id),
+      },
+    });
+    const doctor_json = jsonRead(doctor);
+    if (doctor_json == undefined) {
+      return res.status(500).json({ message: "Can't prase to json" });
+    }
+    console.log(doctor);
+    res.json({ doctor: JSON.parse(doctor_json) });
+  }
+);
+router.get(
+  "/create-doctor/:doctor_id/:hospital_id/:name/:surname",
+  async function (req: Request, res: Response, next: NextFunction) {
+    const doctor_id = req.params.doctor_id;
+    const hospital_id = req.params.hospital_id;
+    const name = req.params.name;
+    const surname = req.params.surname;
+  
+    const doctor = await prisma.doctors.create({
+      data:{
+        hospital_id: parseInt(hospital_id),
+        first_name: name,
+        last_name: surname,
+      }
+    });
+    const doctor_json = jsonRead(doctor);
+    if (doctor_json == undefined) {
+      return res.status(500).json({ message: "Can't prase to json" });
+    }
+    console.log(doctor);
+    res.json({ doctor: `create doctor ${name} ${surname} hospital ID ${hospital_id}` });
+  }
+);
 export default router;

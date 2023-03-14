@@ -94,5 +94,17 @@ router.get(
         res.json({ delete: `Delete question: ${question}, at id ${id}` });
       }
     );
-  
+    router.get(
+      "/genderCreate/:gender",
+      async function (req: Request, res: Response, next: NextFunction) {
+        const screening_questions = await prisma.genders.create({
+          data: {id:3, name:"อื่นๆ"}
+        });
+        
+        res.json({
+         
+          helper: "genderate เพศอื่นๆ",
+        });
+      }
+    );
   export default router;
