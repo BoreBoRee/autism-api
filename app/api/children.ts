@@ -99,7 +99,7 @@ router.get(
   }
 );
 router.get(
-  "/add-child-info/:id/:child_id/:pregnancy/:birth_delay/:birth_category/:birth_after_effect/:weight/:health/:pregnancy_description/:birth_delay_description/:birth_after_effect_description/:health_description/:birth_category_description/:p_health",
+  "/add-child-info/:id/:child_id/:pregnancy/:birth_delay/:birth_category/:birth_after_effect/:weight/:health/:pregnancy_description/:health_description/:birth_category_description/",
   async function (req: Request, res: Response, next: NextFunction) {
     // create parameter from the api route
     const id = req.params.id;
@@ -130,18 +130,18 @@ router.get(
           weight: weight,
           health: health,
           pregnancy_description: pregnancy_description,
-          birth_delay_description: birth_delay_description,
-          birth_after_effect_description: birth_after_effect_description,
+          // birth_delay_description: birth_delay_description,
+          // birth_after_effect_description: birth_after_effect_description,
           health_description: health_description,
           birth_category_description: birth_category_description,
-          p_health: p_health,
-          child_id: parseInt(child_id),
+          // p_health: p_health,
+          child_id: Number(child_id),
         },
       });
     } catch (error) {
       console.log(error);
       res.status(500).json({
-        error: "An error occurred while creating the screening comment.",
+        error: `An error occurred while creating the screening comment. ${error}`,
       });
     }
 
