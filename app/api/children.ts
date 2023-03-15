@@ -29,9 +29,9 @@ router.get(
     res.json({ children: JSON.parse(children_json) });
   }
 );
-
+// "/add-child/:name/:uid/:birthday/:address/:province/:zip_code/:image/:gender_id/:total_child/:number_child/",
 router.get(
-  "/add-child/:name/:uid/:birthday/:address/:province/:zip_code/:image/:gender_id/:total_child/:number_child/",
+  "/add-child/:name/:uid/:birthday/:address/:province/:zip_code/:gender_id/:total_child/:number_child/",
   async function (req: Request, res: Response, next: NextFunction) {
     const comment = req.params.comment;
     const child_name = req.params.name;
@@ -62,8 +62,8 @@ router.get(
           // district_id: parseInt(district),
           // sub_district_id: parseInt(sub_district),
           zip_code: parseInt(zip_code),
-          image_file_name: image,
-          image_content_type: image,
+          image_file_name: 'no',
+          image_content_type: 'no',
           image_file_size: 0,
           user_id: parseInt(uid),
           gender_id: parseInt(gender_id),
@@ -79,7 +79,10 @@ router.get(
     }
     const get_chld_ID = await prisma.children.findMany({
       where:{
-        name:child_name
+        name:child_name, 
+        gender_id:parseInt(gender_id),
+        total_child:parseInt(total_child),
+        number_child:parseInt(number_child),
       },
       select:{
         id: true
@@ -89,9 +92,10 @@ router.get(
       },
       take:1
     })
-    const only_id = get_chld_ID[0].id
-
-    res.json({ Status: `Add child success information`, child_id:only_id});
+    const only_id = Number(get_chld_ID[0].id)
+    
+    // child_id:only_id
+    res.json({ Status: `Add child success information`, child_id:only_id });
   }
 );
 router.get(
