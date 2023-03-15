@@ -246,14 +246,14 @@ router.get(
       addUser = `login with uid ${uid}`;
     } else {
       userStatus = "not exist";
-      const user = await prisma.users.findMany({
-        where: { email_id: uid },
-      });
-      user_json = jsonRead(user);
-      addUser = `add ${uid} into database`;
-      if (user_json == undefined) {
-        return res.status(500).json({ message: "Can't prase to json" });
-      }
+      // const user = await prisma.users.findMany({
+      //   where: { email_id: uid },
+      // });
+      // user_json = jsonRead(user);
+      // addUser = `add ${uid} into database`;
+      // if (user_json == undefined) {
+      //   return res.status(500).json({ message: "Can't prase to json" });
+      // }
     }
     console.log(user);
     res.json({
