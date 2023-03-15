@@ -31,7 +31,7 @@ router.get(
 );
 
 router.get(
-  "/add-child/:name/:uid/:birthday/:address/:province/:district/:sub_district/:zip_code/:image/:gender_id/:total_child/:number_child/",
+  "/add-child/:name/:uid/:birthday/:address/:province/:zip_code/:image/:gender_id/:total_child/:number_child/",
   async function (req: Request, res: Response, next: NextFunction) {
     const comment = req.params.comment;
     const child_name = req.params.name;
@@ -59,8 +59,8 @@ router.get(
           birthday: new Date(birthday),
           address: address,
           province_id: parseInt(province),
-          district_id: parseInt(district),
-          sub_district_id: parseInt(sub_district),
+          // district_id: parseInt(district),
+          // sub_district_id: parseInt(sub_district),
           zip_code: parseInt(zip_code),
           image_file_name: image,
           image_content_type: image,

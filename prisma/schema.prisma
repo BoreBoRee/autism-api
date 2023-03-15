@@ -63,8 +63,8 @@ model children {
   birthday           DateTime?           @db.Date
   address            String?             @db.VarChar
   province_id        BigInt?
-  district_id        BigInt?
-  sub_district_id    BigInt?
+  // district_id        BigInt?
+  // sub_district_id    BigInt?
   zip_code           Int?
   image_file_name    String?             @db.VarChar
   image_content_type String?             @db.VarChar
@@ -78,10 +78,12 @@ model children {
   number_child       Int?
   child_developers   child_developers[]
   child_pregnancies  child_pregnancies[]
-  districts          districts?          @relation(fields: [district_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  // districts          districts?          @relation(fields: [district_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   genders            genders?            @relation(fields: [gender_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   provinces          provinces?          @relation(fields: [province_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  sub_districts      sub_districts?      @relation(fields: [sub_district_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+ 
+  // sub_districts      sub_districts?      @relation(fields: [sub_district_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   users              users?              @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   screenings         screenings[]
 }
@@ -92,7 +94,7 @@ model districts {
   province_id   BigInt?
   created_at    DateTime        @default(now()) @db.Timestamp(6)
   updated_at    DateTime        @default(now()) @db.Timestamp(6)
-  children      children[]
+  // children      children[]
   provinces     provinces?      @relation(fields: [province_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   sub_districts sub_districts[]
 }
@@ -264,7 +266,7 @@ model sub_districts {
   zip_code    Int?
   created_at  DateTime   @default(now()) @db.Timestamp(6)
   updated_at  DateTime   @default(now()) @db.Timestamp(6)
-  children    children[]
+  // children    children[]
   districts   districts? @relation(fields: [district_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   provinces   provinces? @relation(fields: [province_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
