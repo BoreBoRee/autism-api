@@ -8,6 +8,7 @@ import location from './api/location';
 import questionnaire from './api/questionnaire';
 import user_auth from './api/user-auth';
 import media from './api/media';
+import data from './api/graph-data';
 import demo from './api/add-demo-accout';
 
 
@@ -18,6 +19,7 @@ app.use(cors());
 const port = 5000;
 
 async function main() {
+    app.use('/data', data)
     app.use('/advice', advice_excercise)
     app.use('/analyze', analyze_doctor)
     app.use('/children', children)

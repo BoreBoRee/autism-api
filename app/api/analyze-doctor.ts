@@ -153,6 +153,7 @@ router.get(
   
     const doctor = await prisma.doctors.create({
       data:{
+        user_id:parseInt(doctor_id),
         hospital_id: parseInt(hospital_id),
         first_name: name,
         last_name: surname,
@@ -166,4 +167,5 @@ router.get(
     res.json({ doctor: `create doctor ${name} ${surname} hospital ID ${hospital_id}` });
   }
 );
+//http://localhost:5000/analyze/create-doctor/1446/1/borebo/doctor 
 export default router;

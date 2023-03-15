@@ -56,7 +56,7 @@ router.get(
       const newComment = await prisma.children.create({
         data: {
           name: child_name,
-          birthday: birthday,
+          birthday: new Date(birthday),
           address: address,
           province_id: parseInt(province),
           district_id: parseInt(district),
@@ -74,7 +74,7 @@ router.get(
     } catch (error) {
       console.log(error);
       res.status(500).json({
-        error: "An error occurred while creating the screening comment.",
+        error: `An error occurred while creating the screening comment. ${error}`,
       });
     }
     const get_chld_ID = await prisma.children.findMany({

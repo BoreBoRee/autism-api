@@ -15,7 +15,7 @@ model ar_internal_metadata {
 }
 
 model child_developers {
-  id                         Int    @id @default(autoincrement())
+  id                         BigInt    @id @default(autoincrement())
   child_id                   BigInt?
   eat                        String?   @db.VarChar
   sleep                      String?   @db.VarChar
