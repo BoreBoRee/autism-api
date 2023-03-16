@@ -116,16 +116,13 @@ router.get(
     const birth_delay = req.params.birth_delay;
     const birth_category = req.params.birth_category;
     const birth_after_effect = req.params.birth_after_effect;
-    const weight = req.params.weight;
     const health = req.params.health;
-    const pregnancy_description = req.params.pregnancy_description;
-    const birth_delay_description = req.params.birth_delay_description;
-    const birth_after_effect_description =
+    let weight = req.params.weight == "null" ? null : req.params.weight;
+    let pregnancy_description = req.params.pregnancy_description == "null" ? null : req.params.pregnancy_description;
       req.params.birth_after_effect_description;
-    const health_description = req.params.health_description;
-    const birth_category_description = req.params.birth_category_description;
-    const p_health = req.params.p_health;
-
+    let health_description = req.params.health_description  == "null" ? null : req.params.health_description;
+    let birth_category_description = req.params.birth_category_description == "null" ? null : req.params.birth_category_description;
+    
 
     try {
       const newComment = await prisma.child_pregnancies.create({
