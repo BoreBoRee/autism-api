@@ -50,11 +50,21 @@ router.get(
 
     // const time = String(DateTime)
     console.log(comment);
-    
+    const get_chld_ID_4create = await prisma.children.findMany({
+      select:{
+        id: true
+      },
+      orderBy:{
+        id:'desc'
+      },
+      take:1
+    })
+    const only_id_4create = Number(get_chld_ID_4create[0].id)
 
     try {
       const newComment = await prisma.children.create({
         data: {
+          id: only_id_4create+1,
           name: child_name,
           birthday: new Date(birthday),
           address: address,
@@ -80,9 +90,7 @@ router.get(
     const get_chld_ID = await prisma.children.findMany({
       where:{
         name:child_name, 
-        gender_id:parseInt(gender_id),
-        total_child:parseInt(total_child),
-        number_child:parseInt(number_child),
+        user_id: parseInt(uid)
       },
       select:{
         id: true
