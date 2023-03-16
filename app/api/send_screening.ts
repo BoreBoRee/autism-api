@@ -8,7 +8,7 @@ var router = express.Router();
 const prisma = new PrismaClient();
 
 router.get(
-    "/send-result/:score/:child_id/:screening_id/:comment/:is_guest/:result_id",
+    "/send-result/:score/:child_id/:comment/:is_guest/:result_id",
         
     async function (req: Request, res: Response, next: NextFunction) {
         let is_guest = false;
