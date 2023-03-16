@@ -58,7 +58,7 @@ router.get(
   }
 );
 router.get(
-  "/analyze-children/:uid/:comment",
+  "/analyze-children/:uid/:child_id/:comment",
   async function (req: Request, res: Response, next: NextFunction) {
     const comment = req.params.comment;
     const screening_id = req.params.uid;
@@ -81,11 +81,14 @@ router.get(
     }
 
     try {
-      const newComment = await prisma.screening_comments.create({
+      const newComment = await prisma.screening_comments.updateMany({
+        where:{
+            // user_id: parseInt(screening_id),
+           screening_id: parseInt(req.params.child_id)},
         data: {
           id: parseInt(JSON.parse(highestIdComment_json)) + 1,
           comment: comment,
-          screening_id: parseInt(screening_id),
+          // user_id: parseInt(screening_id),
           doctor_id: 1,
           status: "finish",
         },
@@ -102,23 +105,32 @@ router.get(
 );
 // "/analyze_send/:user_id/:child_id/:score/:information",
 router.get(
-  "/analyze_send/:user_id/:child_id/:score/:information/",
+  "/analyze_send/:child_id/:score/:information",
   async function (req: Request, res: Response, next: NextFunction) {
-    const user_id = req.params.user_id;
+    // const user_id = req.params.user_id;
     const child_id = req.params.child_id;
     const score = req.params.score;
     const information = req.params.information;
-    const screening_comments = await prisma.screening_comments.create({
+    try{
+      const screening_comments = await prisma.screening_comments.create({
       data: {
-        child_id: parseInt(child_id),
-        screening_id: parseInt(user_id),
+
+        screening_id: parseInt(child_id),
+        // user_id: parseInt(user_id),
         information: information,
         screening_score: parseInt(score),
         doctor_id: null,
         comment: null,
         status: "pending",
       },
-    });
+    });}
+    catch (error) {
+      console.log(error);
+      res.status(500).json({
+        error: `An error occurred while creating the screening comment. ${error}`,
+      });
+    }
+    
 
     const screening_info = `Send Child ${child_id} to doctor of this information ${information} score ${score}}`;
     console.log(screening_info);
