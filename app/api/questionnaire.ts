@@ -30,18 +30,23 @@ router.get(
     "/questionnaire/score-advice/:score",
     async function (req: Request, res: Response, next: NextFunction) {
       const score = req.params.score;
+      let screening_score_send;
       var screening_score;
       if (parseInt(score) <= 2){
+        screening_score_send = 1
         screening_score = await prisma.screening_results.findMany({
           where: { id: 1 },
+          
         });
       }
       else if (parseInt(score) > 2 && parseInt(score) <= 7){
+        screening_score_send = 2
         screening_score = await prisma.screening_results.findMany({
           where: { id: 2 },
         });
       }
       else {
+        screening_score_send = 3
         screening_score = await prisma.screening_results.findMany({
           where: { id: 3 },
         });
@@ -52,7 +57,7 @@ router.get(
       if (screening_score_sjon == undefined) {
         return res.status(500).json({ message: "Can't prase to json" });
       }
-      res.json({ suggestion: JSON.parse(screening_score_sjon) });
+      res.json({ suggestion: JSON.parse(screening_score_sjon), screening_result_id: screening_score_send });
     }
   );
   router.get(
