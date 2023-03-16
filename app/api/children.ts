@@ -37,16 +37,14 @@ router.get(
     const child_name = req.params.name;
     const uid = req.params.uid;
     const birthday = req.params.birthday;
-    const address = req.params.address;
+    let address = req.params.address == "null"? null : req.params.address;
     const province = req.params.province;
-    const district = req.params.district;
-    const sub_district = req.params.sub_district;
-    const zip_code = req.params.zip_code;
-    const image = req.params.image;
+
+    let zip_code = req.params.zip_code == "null"? null : parseInt(req.params.zip_code);
+    // const image = req.params.image;
     const gender_id = req.params.gender_id;
     const total_child = req.params.total_child;
     const number_child = req.params.number_child;
-    const screening_id = req.params.uid;
 
     // const time = String(DateTime)
     console.log(comment);
@@ -73,7 +71,7 @@ router.get(
           province_id: parseInt(province),
           // district_id: parseInt(district),
           // sub_district_id: parseInt(sub_district),
-          zip_code: parseInt(zip_code),
+          zip_code: zip_code,
           image_file_name: 'no',
           image_content_type: 'no',
           image_file_size: 0,
