@@ -10,8 +10,9 @@ app.use(cors());
 const prisma = new PrismaClient();
 
 router.get(
-    "/province",
-    async function (req: Request, res: Response, next: NextFunction) {
+  "/province",
+  async function (req: Request, res: Response, next: NextFunction) {
+    try {
       const provinces = await prisma.provinces.findMany();
       console.log(provinces);
       const provinces_json = jsonRead(provinces);
@@ -19,11 +20,19 @@ router.get(
         return res.status(500).json({ message: "Can't prase to json" });
       }
       res.json({ province: JSON.parse(provinces_json) });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+
+        error: `An error occurred while creating the screening comment. ${error}`,
+      });
     }
-  );
-  router.get(
-    "/regions",
-    async function (req: Request, res: Response, next: NextFunction) {
+  }
+);
+router.get(
+  "/regions",
+  async function (req: Request, res: Response, next: NextFunction) {
+    try {
       const regions = await prisma.regions.findMany();
       console.log(regions);
       const regions_json = jsonRead(regions);
@@ -31,11 +40,19 @@ router.get(
         return res.status(500).json({ message: "Can't prase to json" });
       }
       res.json({ regions: JSON.parse(regions_json) });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+
+        error: `An error occurred while creating the screening comment. ${error}`,
+      });
     }
-  );
-  router.get(
-    "/districts",
-    async function (req: Request, res: Response, next: NextFunction) {
+  }
+);
+router.get(
+  "/districts",
+  async function (req: Request, res: Response, next: NextFunction) {
+    try {
       const districts = await prisma.districts.findMany();
       console.log(districts);
       const districts_json = jsonRead(districts);
@@ -43,11 +60,19 @@ router.get(
         return res.status(500).json({ message: "Can't prase to json" });
       }
       res.json({ districts: JSON.parse(districts_json) });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+
+        error: `An error occurred while creating the screening comment. ${error}`,
+      });
     }
-  );
-  router.get(
-    "/sub_districts",
-    async function (req: Request, res: Response, next: NextFunction) {
+  }
+);
+router.get(
+  "/sub_districts",
+  async function (req: Request, res: Response, next: NextFunction) {
+    try {
       const sub_districts = await prisma.sub_districts.findMany();
       console.log(sub_districts);
       const sub_districts_json = jsonRead(sub_districts);
@@ -55,6 +80,13 @@ router.get(
         return res.status(500).json({ message: "Can't prase to json" });
       }
       res.json({ sub_districts: JSON.parse(sub_districts_json) });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+
+        error: `An error occurred while creating the screening comment. ${error}`,
+      });
     }
-  );
-  export default router;
+  }
+);
+export default router;

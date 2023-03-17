@@ -10,16 +10,25 @@ app.use(cors());
 const prisma = new PrismaClient();
 
 router.get(
-    "/media",
-    async function (req: Request, res: Response, next: NextFunction) {
+  "/media",
+  async function (req: Request, res: Response, next: NextFunction) {
+    try {
       const screening_media = await prisma.screening_media.findMany();
       console.log(screening_media);
-  
+
       const screening_media_json = jsonRead(screening_media);
       if (screening_media_json == undefined) {
         return res.status(500).json({ message: "Can't prase to json" });
       }
-      res.json({ users: JSON.parse(screening_media_json)});
+      res.json({ users: JSON.parse(screening_media_json) });
     }
-  );
-  export default router;
+    catch (error) {
+      console.log(error);
+      res.status(500).json({
+
+        error: `An error occurred while creating the screening comment. ${error}`,
+      });
+    }
+  }
+);
+export default router;
