@@ -11,20 +11,27 @@ router.get(
     "/send-result/:score/:child_id/:comment/:is_guest/:result_id",
 
     async function (req: Request, res: Response, next: NextFunction) {
+        const id_table = await prisma.screenings.findMany({
+            select: { id: true },
+            orderBy: { id: "desc" },
+            take: 1,
+        });
+        var is_guest_bool; 
         try {
             let is_guest;
             if (req.params.is_guest == "true") {
-                is_guest = true;
+                is_guest_bool = true;
             }
-            else if (req.params.is_guest == "false") {
-                is_guest = false;
+            else {
+                is_guest_bool = false;
             }
             const highestIdComment = await prisma.screenings.create({
 
                 data: {
+                    id: Number(id_table[0].id) + 1,
                     score: parseInt(req.params.score),
                     child_id: parseInt(req.params.child_id),
-                    is_guest: is_guest,
+                    is_guest: is_guest_bool,
                     screening_result_id: parseInt(req.params.result_id),
                 }
 
