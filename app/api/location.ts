@@ -13,7 +13,11 @@ router.get(
   "/province",
   async function (req: Request, res: Response, next: NextFunction) {
     try {
-      const provinces = await prisma.provinces.findMany();
+      const provinces = await prisma.provinces.findMany({
+        orderBy: {
+          name: "asc",
+        },
+      });
       console.log(provinces);
       const provinces_json = jsonRead(provinces);
       if (provinces_json == undefined) {

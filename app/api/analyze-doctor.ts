@@ -112,10 +112,17 @@ router.get(
     const child_id = req.params.child_id;
     const score = req.params.score;
     const information = req.params.information;
+
     try {
+      const id_table = await prisma.screenings.findMany({
+        select: { id: true },
+        orderBy: { id: "desc" },
+        take: 1,
+    });
+     
       const screening_comments = await prisma.screening_comments.create({
         data: {
-
+          id: Number(id_table[0].id) + 1,
           screening_id: parseInt(child_id),
           // user_id: parseInt(user_id),
           information: information,

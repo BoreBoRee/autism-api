@@ -11,7 +11,11 @@ router.get(
     async function (req: Request, res: Response, next: NextFunction) {
       
       try{
-        const suggestion_categories = await prisma.suggestion_categories.findMany();
+        const suggestion_categories = await prisma.suggestion_categories.findMany({
+        include:{
+          suggestion_details: true
+        },   
+        });
         console.log(suggestion_categories);
         const suggestion_categories_json = jsonRead(suggestion_categories);
         if (suggestion_categories_json == undefined) {
