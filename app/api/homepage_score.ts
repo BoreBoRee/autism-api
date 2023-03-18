@@ -11,22 +11,38 @@ router.get(
     "/get-highscore/:child_id/",
     async function (req: Request, res: Response, next: NextFunction) {
         try{
-        const child_score = await prisma.screenings.findMany({
+            const child_score = await prisma.screenings.findMany({
+                where: {
+                    child_id: parseInt(req.params.child_id),
+                },
+                orderBy: {
+                    created_at: "desc",
+                    
+                },
+                
+                
+            });
+        const child_score_most = await prisma.screenings.findMany({
             where: {
                 child_id: parseInt(req.params.child_id),
             },
-            orderBy: {
-                score: "desc",
-            },
+            orderBy: [{score: "desc",}, {created_at: "desc",}],
+                
+                
+                
+            
+            take: 1,
             
         });
+       
         console.log(child_score);
         const child_score_json = jsonRead(child_score);
-        if (child_score_json == undefined) {
+        const child_score_most_json = jsonRead(child_score_most);
+        if (child_score_json == undefined || child_score_most_json == undefined) {
             return res.status(500).json({ message: "Can't prase to json" });
         }
         console.log(child_score_json);
-        res.json({ users: JSON.parse(child_score_json) });
+        res.json({ most_score: JSON.parse(child_score_most_json), all_children: JSON.parse(child_score_json) });
     }
     catch (error) {
         console.log(error);
