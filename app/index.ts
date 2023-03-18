@@ -11,6 +11,7 @@ import media from './api/media';
 import data from './api/graph-data';
 import demo from './api/add-demo-accout';
 import send_screening from './api/send_screening';
+import score from './api/homepage_score';
 
 var express = require("express");
 var cors = require("cors");
@@ -19,6 +20,7 @@ app.use(cors());
 const port = 5000;
 
 async function main() {
+    app.use('/score', score)
     app.use('/send-screening', send_screening)
     app.use('/data', data)
     app.use('/advice', advice_excercise)
