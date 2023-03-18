@@ -11,12 +11,12 @@ router.get(
     "/send-result/:score/:child_id/:comment/:is_guest/:result_id",
 
     async function (req: Request, res: Response, next: NextFunction) {
-        const id_table = await prisma.screenings.findMany({
-            select: { id: true },
-            orderBy: { id: "desc" },
-            take: 1,
-        });
-        var is_guest_bool; 
+            const id_table = await prisma.screenings.findMany({
+                select: { id: true },
+                orderBy: { id: "desc" },
+                take: 1,
+            });
+            var is_guest_bool; 
         try {
             let is_guest;
             if (req.params.is_guest == "true") {
