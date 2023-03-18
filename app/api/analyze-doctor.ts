@@ -115,7 +115,7 @@ router.get(
     try {
       const screening_comments = await prisma.screening_comments.create({
         data: {
-
+          id: Number(id_table[0].id) + 1,
           screening_id: parseInt(child_id),
           // user_id: parseInt(user_id),
           information: information,
