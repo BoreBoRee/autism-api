@@ -47,7 +47,7 @@ router.get(
         return res.status(500).json({ message: "Can't prase to json" });
       }
       res.json({
-        users: JSON.parse(hospitals_json),
+        hospitals: JSON.parse(hospitals_json),
         helper:
           "Regions id ภาคใต้:1, ภาคกลาง:2, ภาคกลาง(ปริมณฑล):3, ภาคตะวันออกเฉียงเหนือ:4, ภาคเหนือ:5",
       });
