@@ -57,6 +57,27 @@ router.get(
     res.json({ screenings_json: JSON.parse(screenings_json) });
   }
 );
+
+router.get(
+  "/analyze-children/test",
+  async function (req: Request, res: Response, next: NextFunction) {
+    const screenings = await prisma.screening_comments.findMany({
+      // select: { screening_comments: true, id: true, score: true },
+      where: {
+        screenings:{children:{users:{ id:1452}} }
+        
+      },
+      
+    });
+    console.log(screenings);
+    const screenings_json = jsonRead(screenings);
+    if (screenings_json == undefined) {
+      return res.status(500).json({ message: "Can't prase to json" });
+    }
+    console.log(screenings);
+    res.json({ screenings_json: JSON.parse(screenings_json) });
+  }
+);
 router.get(
   "/analyze-children/:uid/:child_id/:comment",
   async function (req: Request, res: Response, next: NextFunction) {
@@ -84,7 +105,7 @@ router.get(
       const newComment = await prisma.screening_comments.updateMany({
         where: {
           // user_id: parseInt(screening_id),
-          screening_id: parseInt(req.params.child_id)
+          screening_id: parseInt(req.params.child_id),
         },
         data: {
           id: parseInt(JSON.parse(highestIdComment_json)) + 1,
@@ -115,12 +136,12 @@ router.get(
 
     try {
       const id_table = await prisma.screenings.findMany({
-        where:{child_id: parseInt(child_id), score: parseInt(score)},
+        where: { child_id: parseInt(child_id), score: parseInt(score) },
         select: { id: true },
         orderBy: { id: "desc" },
         take: 1,
-    });
-     
+      });
+
       const screening_comments = await prisma.screening_comments.create({
         data: {
           id: Number(id_table[0].id) + 1,
@@ -133,14 +154,12 @@ router.get(
           status: "pending",
         },
       });
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error);
       res.status(500).json({
         error: `An error occurred while creating the screening comment. ${error}`,
       });
     }
-
 
     const screening_info = `Send Child ${child_id} to doctor of this information ${information} score ${score}}`;
     console.log(screening_info);
@@ -167,7 +186,6 @@ router.get(
     } catch (error) {
       console.log(error);
       res.status(500).json({
-
         error: `An error occurred while creating the screening comment. ${error}`,
       });
     }
@@ -187,22 +205,23 @@ router.get(
           hospital_id: parseInt(hospital_id),
           first_name: name,
           last_name: surname,
-        }
+        },
       });
       const doctor_json = jsonRead(doctor);
       if (doctor_json == undefined) {
         return res.status(500).json({ message: "Can't prase to json" });
       }
       console.log(doctor);
-      res.json({ doctor: `create doctor ${name} ${surname} hospital ID ${hospital_id}` });
+      res.json({
+        doctor: `create doctor ${name} ${surname} hospital ID ${hospital_id}`,
+      });
     } catch (error) {
       console.log(error);
       res.status(500).json({
-
         error: `An error occurred while creating the screening comment. ${error}`,
       });
     }
   }
 );
-//http://localhost:5000/analyze/create-doctor/1446/1/borebo/doctor 
+//http://localhost:5000/analyze/create-doctor/1446/1/borebo/doctor
 export default router;

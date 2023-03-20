@@ -132,11 +132,21 @@ router.get(
     req.params.birth_after_effect_description;
     let health_description = req.params.health_description == "null" ? null : req.params.health_description;
     let birth_category_description = req.params.birth_category_description == "null" ? null : req.params.birth_category_description;
-
+    const get_chld_ID_4create = await prisma.children.findMany({
+      select: {
+        id: true
+      },
+      orderBy: {
+        id: 'desc'
+      },
+      take: 1
+    })
+    const only_id_4create = Number(get_chld_ID_4create[0].id)
 
     try {
       const newComment = await prisma.child_pregnancies.create({
         data: {
+          id: only_id_4create + 1,
           // change the data base on parameter
           pregnancy: pregnancy,
           birth_delay: birth_delay,
