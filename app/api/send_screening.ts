@@ -9,8 +9,10 @@ const prisma = new PrismaClient();
 
 router.get(
     "/send-result/:score/:child_id/:comment/:is_guest/:result_id",
-
+    
     async function (req: Request, res: Response, next: NextFunction) {
+        var child_id = req.params.child_id;
+        var child_save;
             const id_table = await prisma.screenings.findMany({
                 select: { id: true },
                 orderBy: { id: "desc" },
@@ -18,6 +20,13 @@ router.get(
             });
             var is_guest_bool; 
         try {
+            if (child_id == "null"){
+                child_save = null;
+            }
+            else {
+                child_save = parseInt(child_id);
+
+            }
             let is_guest;
             if (req.params.is_guest == "true") {
                 is_guest_bool = true;
@@ -30,7 +39,7 @@ router.get(
                 data: {
                     id: Number(id_table[0].id) + 1,
                     score: parseInt(req.params.score),
-                    child_id: parseInt(req.params.child_id),
+                    child_id: child_save,
                     is_guest: is_guest_bool,
                     screening_result_id: parseInt(req.params.result_id),
                 }
