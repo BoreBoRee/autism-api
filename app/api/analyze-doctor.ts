@@ -135,7 +135,13 @@ router.get(
     const information = req.params.information;
 
     try {
-      const id_table = await prisma.screenings.findMany({
+      const id_table = await prisma.screening_comments.findMany({
+        where: { },
+        select: { id: true },
+        orderBy: { id: "desc" },
+        take: 1,
+      });
+      const id_table_screening = await prisma.screenings.findMany({
         where: { child_id: parseInt(child_id), score: parseInt(score) },
         select: { id: true },
         orderBy: { id: "desc" },
@@ -145,7 +151,7 @@ router.get(
       const screening_comments = await prisma.screening_comments.create({
         data: {
           id: Number(id_table[0].id) + 1,
-          screening_id: parseInt(child_id),
+          screening_id: Number(id_table_screening[0].id),
           // user_id: parseInt(user_id),
           information: information,
           screening_score: parseInt(score),
