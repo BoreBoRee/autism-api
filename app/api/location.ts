@@ -34,6 +34,39 @@ router.get(
   }
 );
 router.get(
+  "/province-test/:id",
+  async function (req: Request, res: Response, next: NextFunction) {
+    try {
+      const provinces_id = Number(req.params.id) ;
+      var where; 
+      // provinces_id ? { provinces_id } : {};
+      if (provinces_id == 0) {
+        where = {}; 
+      }
+      else{
+        where = provinces_id;
+      }
+      const provinces = await prisma.provinces.findMany({
+        where: {id:where}
+        
+        
+      });
+      console.log(provinces);
+      const provinces_json = jsonRead(provinces);
+      if (provinces_json == undefined) {
+        return res.status(500).json({ message: "Can't prase to json" });
+      }
+      res.json({ province: JSON.parse(provinces_json) });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+
+        error: `An error occurred while creating the screening comment. ${error}`,
+      });
+    }
+  }
+);
+router.get(
   "/regions",
   async function (req: Request, res: Response, next: NextFunction) {
     try {

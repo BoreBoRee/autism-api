@@ -115,6 +115,7 @@ router.get(
 
     try {
       const id_table = await prisma.screenings.findMany({
+        where:{child_id: parseInt(child_id), score: parseInt(score)},
         select: { id: true },
         orderBy: { id: "desc" },
         take: 1,
