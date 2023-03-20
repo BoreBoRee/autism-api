@@ -15,14 +15,18 @@ router.get(
   "/user/all",
   async function (req: Request, res: Response, next: NextFunction) {
     try {
-      const user = await prisma.users.findMany();
+      var user_quantity = 0;
+      var count = 0;
+
+      const user = await prisma.users.findMany().then((data) => (count = data.length));
+      user_quantity = user;;
       console.log(user);
       const allUserJson = jsonRead(user);
       if (allUserJson == undefined) {
         return res.status(500).json({ message: "Can't prase to json" });
       }
       console.log(user);
-      res.json({ users: JSON.parse(allUserJson) });
+      res.json({ users: user_quantity });
     }
     catch (error) {
       console.log(error);
@@ -61,6 +65,7 @@ router.get(
             username: username,
             facebook_id: uid,
             role_id: 1,
+            birthdate: null,
           },
         });
         const user = await prisma.users.findMany({
@@ -117,6 +122,7 @@ router.get(
             username: username,
             google_id: uid,
             role_id: 1,
+            birthdate: null,
           },
         });
         const user = await prisma.users.findMany({
@@ -147,13 +153,13 @@ router.get(
 );
 
 router.get(
-  "/email-login/:uid/:username/:email",
+  "/email-login/:uid/:username/:email/:birthdate",
   async function (req: Request, res: Response, next: NextFunction) {
     try {
       var user_json = JSON.parse("{}");
       const username = req.params.username;
       const uid = req.params.uid;
-
+      const birthdate = req.params.birthdate;
       const email = "email";
       const provider = "email";
       var userStatus = "";
@@ -174,6 +180,7 @@ router.get(
             username: username,
             email_id: uid,
             role_id: 1,
+            birthdate: Date(birthdate),
           },
         });
         const user = await prisma.users.findMany({
@@ -191,6 +198,7 @@ router.get(
         userStatus: { userStatus },
         addUser: { addUser },
         provider: { provider },
+        
       });
     }
     catch (error) {
@@ -281,12 +289,13 @@ router.get(
   }
 );
 router.get(
-  "/doctor-login/:uid/:username/:email",
+  "/doctor-login/:uid/:username/:email/:birthdate",
   async function (req: Request, res: Response, next: NextFunction) {
     try {
       var user_json = JSON.parse("{}");
       const username = req.params.username;
       const uid = req.params.uid;
+      const birthdate = req.params.birthdate;
 
       const email = "email";
       const provider = "email";
@@ -317,6 +326,7 @@ router.get(
         userStatus: { userStatus },
         addUser: { addUser },
         provider: { provider },
+        
       });
     }
     catch (error) {

@@ -249,10 +249,6 @@ router.get(
         store_answer[`${i}_true`] = question_answer_true;
       }
 
-      // const question_answer_json = jsonRead(question_answer_false);
-      // if (question_answer_json == undefined) {
-      //   return res.status(500).json({ message: "Can't prase to json" });
-      // }users: JSON.parse(question_answer_json)
       res.json({ data: store_answer });
     } catch (error) {
       console.log(error);
@@ -262,5 +258,29 @@ router.get(
     }
   }
 );
+
+router.get(
+  "/questionnaire_number",
+  async function (req: Request, res: Response, next: NextFunction) {
+    try {
+      var user_quantity = 0;
+      var count = 0;
+      const questionnaire_number = await prisma.screenings.findMany({
+        
+      }).then((data) => (count = data.length));
+      user_quantity = questionnaire_number;
+      res.json({ data: user_quantity });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        error: `An error occurred while creating the screening comment. ${error}`,
+      });
+    }
+    
+    
+  }
+);
+
+        
 
 export default router;
