@@ -12,7 +12,7 @@ import data from './api/graph-data';
 import demo from './api/add-demo-accout';
 import send_screening from './api/send_screening';
 import score from './api/homepage_score';
-
+import update from './api/change_information';
 var express = require("express");
 var cors = require("cors");
 var app = express();
@@ -20,6 +20,7 @@ app.use(cors());
 const port = 5000;
 
 async function main() {
+    app.use('/update', update)
     app.use('/score', score)
     app.use('/send-screening', send_screening)
     app.use('/data', data)
