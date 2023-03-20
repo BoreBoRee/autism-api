@@ -38,7 +38,7 @@ router.get(
   }
 );
 router.get(
-  "/facebook-login/:uid/:username/:email",
+  "/facebook-login/:uid/:username/:email/:birthdate",
   async function (req: Request, res: Response, next: NextFunction) {
     const username = req.params.username;
     const uid = req.params.uid;
@@ -65,7 +65,7 @@ router.get(
             username: username,
             facebook_id: uid,
             role_id: 1,
-            birthdate: null,
+            birthday: null,
           },
         });
         const user = await prisma.users.findMany({
@@ -96,7 +96,7 @@ router.get(
 );
 
 router.get(
-  "/google-login/:uid/:username/:email",
+  "/google-login/:uid/:username/:email/:birthdate",
   async function (req: Request, res: Response, next: NextFunction) {
     try {
       var user_json = JSON.parse("{}");
@@ -122,7 +122,7 @@ router.get(
             username: username,
             google_id: uid,
             role_id: 1,
-            birthdate: null,
+            birthday: null,
           },
         });
         const user = await prisma.users.findMany({
@@ -160,6 +160,7 @@ router.get(
       const username = req.params.username;
       const uid = req.params.uid;
       const birthdate = req.params.birthdate;
+      const birthday = new Date(birthdate);
       const email = "email";
       const provider = "email";
       var userStatus = "";
@@ -180,7 +181,7 @@ router.get(
             username: username,
             email_id: uid,
             role_id: 1,
-            birthdate: Date(birthdate),
+            birthday: birthday,
           },
         });
         const user = await prisma.users.findMany({
