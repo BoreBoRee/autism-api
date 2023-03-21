@@ -7,12 +7,13 @@ import hospitals from './api/feature-location/hospitals';
 import location from './api/feature-location/location';
 import questionnaire from './api/questionnaires/questionnaire';
 import user_auth from './api/user/user-auth';
-import media from './api/feature-location/media';
+
 import data from './api/graph-data/graph-data';
 import demo from './api/other/add-demo-accout';
 import send_screening from './api/analyzed/send_screening';
 import score from './api/graph-data/homepage_score';
 import update from './api/user/change_information';
+import media from './api/media/media';
 var express = require("express");
 var cors = require("cors");
 var app = express();
