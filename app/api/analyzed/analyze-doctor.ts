@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { PrismaClient } from "@prisma/client";
-import jsonRead from "./json-read-format";
+import jsonRead from "../json-read-format";
 
 const timestamp = Date.now();
 var express = require("express");
@@ -10,11 +10,24 @@ const prisma = new PrismaClient();
 router.get(
   "/analyze-children/finish",
   async function (req: Request, res: Response, next: NextFunction) {
-    const screening_comments = await prisma.screenings.findMany({
+    const screening_comments = await prisma.screening_comments.findMany({
       where: {
-        OR: [{ screening_comments: { none: {} } }],
+        status: "finish",
       },
-      select: { screening_comments: true },
+      include: {
+        screenings: {
+          include: {
+            children: {
+              
+              include: {
+                users: { select: { id: true, username: true }},
+              },
+            },
+          },
+        },
+      },
+
+      
     });
     console.log(screening_comments);
     const screening_comments_json = jsonRead(screening_comments);
@@ -28,24 +41,20 @@ router.get(
 router.get(
   "/analyze-children/pending",
   async function (req: Request, res: Response, next: NextFunction) {
-    const screenings = await prisma.screenings.findMany({
-      select: { screening_comments: true, id: true, score: true },
-      where: {
-        OR: [
-          { score: 8 },
-          { score: 9 },
-          { score: 10 },
-          { score: 11 },
-          { score: 12 },
-          { score: 13 },
-          { score: 14 },
-          { score: 15 },
-          { score: 16 },
-          { score: 17 },
-          { score: 18 },
-          { score: 19 },
-          { score: 20 },
-        ],
+    const screenings = await prisma.screening_comments.findMany({
+      
+      where: {status: "pending" },
+      include: {
+        screenings: {
+          include: {
+            children: {
+              
+              include: {
+                users: { select: { id: true, username: true }},
+              },
+            },
+          },
+        },
       },
     });
     console.log(screenings);

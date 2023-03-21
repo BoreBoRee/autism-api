@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { fieldEncryptionMiddleware } from "prisma-field-encryption";
 import { PrismaClient } from "@prisma/client";
-import jsonRead from "./json-read-format";
+import jsonRead from "../json-read-format";
 
 var express = require("express");
 var router = express.Router();

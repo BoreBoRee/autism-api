@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { PrismaClient } from "@prisma/client";
-import jsonRead from './json-read-format';
+import jsonRead from '../json-read-format';
 import { timestamp_export } from './timestamp';
 
 var express = require("express");

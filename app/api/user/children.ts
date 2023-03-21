@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { PrismaClient } from "@prisma/client";
-import jsonRead from "./json-read-format";
+import jsonRead from "../json-read-format";
 
 var express = require("express");
 var router = express.Router();

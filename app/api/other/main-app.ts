@@ -1,12 +1,12 @@
 
 import { PrismaClient } from "@prisma/client";
-import advice_excercise from './advice-excercise';
-import analyze_doctor from './analyze-doctor';
-import children from './children';
-import hospitals from './hospitals';
-import location from './location';
-import questionnaire from './questionnaire';
-import user_auth from './user-auth';
+import advice_excercise from '../feature-location/advice-excercise';
+import analyze_doctor from '../analyzed/analyze-doctor';
+import children from '../user/children';
+import hospitals from '../feature-location/hospitals';
+import location from '../feature-location/location';
+import questionnaire from '../questionnaires/questionnaire';
+import user_auth from '../user/user-auth';
 
 var express = require("express");
 var cors = require("cors");

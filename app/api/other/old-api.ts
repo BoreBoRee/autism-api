@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { PrismaClient } from "@prisma/client";
-import routers from './api/test-info';
+import routers from './test-info';
 
 var express = require("express");
 var cors = require("cors");

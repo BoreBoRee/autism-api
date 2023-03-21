@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { PrismaClient } from "@prisma/client";
-import jsonRead from "./json-read-format";
+import jsonRead from "../json-read-format";
 
 var express = require("express");
 var router = express.Router();
@@ -280,7 +280,22 @@ router.get(
     
   }
 );
+router.get(
+  '/genders-get'
+  , async function (req: Request, res: Response, next: NextFunction) {
+    try {
+      const genders = prisma.genders.findMany({
+      }).then((data) => res.json({ data: data }));
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        error: `An error occurred while creating the screening comment. ${error}`,
+      });
+    }
+  }
+)
 
+        
         
 
 export default router;

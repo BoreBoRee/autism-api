@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { PrismaClient } from "@prisma/client";
-import jsonRead from './json-read-format';
+import jsonRead from '../json-read-format';
 
 var express = require("express");
 var router = express.Router();
@@ -50,7 +50,7 @@ router.get(
         where: {id:where}
         
         
-      });
+      })
       console.log(provinces);
       const provinces_json = jsonRead(provinces);
       if (provinces_json == undefined) {
