@@ -40,6 +40,26 @@ router.get(
   }
 );
 router.get(
+  "/analyze-pending-list-user/:user_id",
+  async function (req: Request, res: Response, next: NextFunction) {
+    const user_id = req.params.user_id;
+    var usernames = [];
+    const screenings = await prisma.screening_comments.findMany({
+      
+      where: {status: "pending", user_id: parseInt(user_id)},
+      
+    });
+    console.log(screenings);
+    const screenings_json = jsonRead(screenings);
+
+    if (screenings_json == undefined ) {
+      return res.status(500).json({ message: "Can't prase to json" });
+    }
+    console.log(screenings);
+    res.json({ screenings_json: JSON.parse(screenings_json)});
+  }
+);
+router.get(
   "/analyze-pending-list",
   async function (req: Request, res: Response, next: NextFunction) {
   
@@ -87,7 +107,7 @@ router.get(
   "/analyze-children/pending",
   async function (req: Request, res: Response, next: NextFunction) {
     const user_id_only = await prisma.screening_comments.findMany({
-      
+      where: {status: "pending" },
       select: { user_id: true },
       distinct: ["user_id"],
     })

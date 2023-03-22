@@ -178,6 +178,7 @@ model screening_comments {
   information  String?     @db.VarChar
   comment      String?     @db.VarChar
   user_id      BigInt?
+
   screening_score BigInt?
   screening_id BigInt?
   doctor_id    BigInt?
