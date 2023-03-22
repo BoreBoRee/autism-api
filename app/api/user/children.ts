@@ -47,8 +47,9 @@ router.get(
         select: { weight: true },
       });
       const get_info_by_screeing_json = jsonRead(get_info_by_screeing);
+      console.log(get_info_by_screeing_json);
       const children_json = jsonRead(children_info);
-      if (children_json == undefined) {
+      if (children_json == undefined || get_info_by_screeing_json == undefined) {
         return res.status(500).json({ message: "Can't prase to json" });
       }
       console.log(children_json);
@@ -56,7 +57,7 @@ router.get(
         children: JSON.parse(children_json),
         result: JSON.parse(result_json),
         children_weight: children[0].weight,
-        commentAndScore: get_info_by_screeing_json,
+        commentAndScore: JSON.parse(get_info_by_screeing_json),
       });
     } catch (error) {
       console.log(error);
