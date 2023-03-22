@@ -177,18 +177,20 @@ router.get(
     var province_sort;
 
     const now = new Date();
-    const timeStarts = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7);
+    const timeStarts = new Date(now.getFullYear() - 5, now.getMonth(), now.getDate() - 7);
 
     if (timeStart != "0") {
       timeStart_sort = new Date(timeStart);
     } else {
-      timeStart_sort = now;
+      timeStart_sort = timeStarts;
+      console.log("timeEnd", timeStart_sort);
     }
 
     if (timeEnd != "0") {
       timeEnd_sort = new Date(timeEnd);
     } else {
-      timeEnd_sort = timeStarts;
+      timeEnd_sort = now;
+      console.log("timeEnd", timeEnd_sort);
     }
 
     if (province != 0) {
