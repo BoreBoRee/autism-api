@@ -164,99 +164,112 @@ router.get(
       });
     }
   }
-);
-router.get(
+);router.get(
   "/data-sorting/:province_id/:gender_id/:timeStart/:timeEnd",
   async function (req: Request, res: Response, next: NextFunction) {
     var gender = Number(req.params.gender_id);
     var province = Number(req.params.province_id);
     var timeStart = req.params.timeStart;
     var timeEnd = req.params.timeEnd;
+    var timeStart_sort: Date;
+    var timeEnd_sort: Date;
     var gender_sort, time_sort;
-    var  province_sort;
-    // if (timeStart != 0){
+    var province_sort;
 
-    // }
-    // if (timeEnd != 0){
-    // }
+    const now = new Date();
+    const timeStarts = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7);
+
+    if (timeStart != "0") {
+      timeStart_sort = new Date(timeStart);
+    } else {
+      timeStart_sort = now;
+    }
+
+    if (timeEnd != "0") {
+      timeEnd_sort = new Date(timeEnd);
+    } else {
+      timeEnd_sort = timeStarts;
+    }
+
     if (province != 0) {
       province_sort = province;
       console.log("province", province_sort);
-    }
-    if (gender != 0) {
-      gender_sort = gender;
-      console.log("gender", gender_sort)
-    }
-    if (province == 0) {
+    } else {
       province_sort = {};
       console.log("province", province_sort);
     }
-    if (gender == 0) {
+
+    if (gender != 0) {
+      gender_sort = gender;
+      console.log("gender", gender_sort);
+    } else {
       gender_sort = {};
-      console.log("gender", gender_sort)
+      console.log("gender", gender_sort);
     }
-    
-    console.log(gender,gender_sort,province, province_sort)
+
+    console.log(gender, gender_sort, province, province_sort);
+
     let store_answer: { [key: string]: number } = {};
     let count: number;
+
     try {
       for (let i = 1; i <= 20; i++) {
-        const question_answer_false = await prisma.children
-          .findMany({
-            
-            where: {
-              created_at: {
-                gte: new Date(timeStart),
-                lte: new Date(timeEnd)
-              },
-              province_id: province_sort,
-              gender_id: gender_sort,
-              screenings: {
-                some: {
-                  screening_details: {
-                    some: { screening_question_id: i, answered: true },
-                  },
+        const question_answer_false = await prisma.children.findMany({
+          where: {
+            created_at: {
+              gte: timeStart_sort,
+              lte: timeEnd_sort,
+            },
+            province_id: province_sort,
+            gender_id: gender_sort,
+            screenings: {
+              some: {
+                screening_details: {
+                  some: { screening_question_id: i, answered: true },
                 },
               },
             },
-            include: {
-              screenings: {
-                include: {
-                  screening_details: {
-                    where: { answered: true, screening_question_id: 3 },
-                    // select: {answered: true}
-                  },
+          },
+          include: {
+            screenings: {
+              include: {
+                screening_details: {
+                  where: { answered: true, screening_question_id: 3 },
                 },
               },
             },
-          })
-          .then((data) => (count = data.length));
+          },
+        }).then((data) => (count = data.length));
+
         store_answer[`${i}_false`] = question_answer_false;
-        const question_answer_true = await prisma.children
-          .findMany({
-            where: {
-              province_id: province_sort,
-              gender_id: gender_sort,
-              screenings: {
-                some: {
-                  screening_details: {
-                    some: { screening_question_id: i, answered: true },
-                  },
+
+        const question_answer_true = await prisma.children.findMany({
+          where: {
+            created_at: {
+              gte: timeStart_sort,
+              lte: timeEnd_sort,
+            },
+            province_id: province_sort,
+            gender_id: gender_sort,
+            screenings: {
+              some: {
+                screening_details: {
+                  some: { screening_question_id: i, answered: true },
                 },
               },
             },
-            include: {
-              screenings: {
-                include: {
-                  screening_details: {
-                    where: { answered: true, screening_question_id: 3 },
-                    // select: {answered: true}
-                  },
+          },
+          include: {
+            screenings: {
+              include: {
+                screening_details: {
+                  where: { answered: true, screening_question_id: 3 },
                 },
               },
             },
-          })
-          .then((data) => (count = data.length));
+          },
+        }).then((data) => (count = data.length));
+
         store_answer[`${i}_true`] = question_answer_true;
       }
 
