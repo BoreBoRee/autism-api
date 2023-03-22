@@ -10,6 +10,7 @@ const prisma = new PrismaClient();
 router.get(
   "/analyze-children/finish",
   async function (req: Request, res: Response, next: NextFunction) {
+
     const screening_comments = await prisma.screening_comments.findMany({
       where: {
         status: "finish",
@@ -41,6 +42,7 @@ router.get(
 router.get(
   "/analyze-children/pending",
   async function (req: Request, res: Response, next: NextFunction) {
+    
     const screenings = await prisma.screening_comments.findMany({
       
       where: {status: "pending" },
@@ -136,8 +138,9 @@ router.get(
 );
 // "/analyze_send/:user_id/:child_id/:score/:information",
 router.get(
-  "/analyze_send/:child_id/:score/:information",
+  "/analyze_send/:child_id/:score/:information/:user_id",
   async function (req: Request, res: Response, next: NextFunction) {
+    const user_id = req.params.user_id;
     // const user_id = req.params.user_id;
     const child_id = req.params.child_id;
     const score = req.params.score;
@@ -166,6 +169,8 @@ router.get(
           screening_score: parseInt(score),
           doctor_id: null,
           comment: null,
+          child_id: parseInt(child_id),
+          user_id: parseInt(user_id),
           status: "pending",
         },
       });
