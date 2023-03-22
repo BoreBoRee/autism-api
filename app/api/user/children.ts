@@ -16,7 +16,7 @@ router.get(
   async function (req: Request, res: Response, next: NextFunction) {
     const screeing_id = req.params.screeing_id;
     const child_id = req.params.child_id;
-   
+
     
     try {
       const result = await prisma.screening_details.findMany({
@@ -29,25 +29,38 @@ router.get(
         where: {
           id: parseInt(child_id),
         },
-       
       });
-      const children = await prisma.child_pregnancies.findMany({
-        where:{
-          child_id:parseInt(child_id)
-          
+      const get_info_by_screeing = await prisma.screening_comments.findMany({
+        where: {
+          screening_id: parseInt(screeing_id),
         },
-        select:{weight:true}
+        select: {
+          comment: true,
+          screening_score: true,
+        },
       });
+
+      const children = await prisma.child_pregnancies.findMany({
+        where: {
+          child_id: parseInt(child_id),
+        },
+        select: { weight: true },
+      });
+      const get_info_by_screeing_json = jsonRead(get_info_by_screeing);
       const children_json = jsonRead(children_info);
       if (children_json == undefined) {
         return res.status(500).json({ message: "Can't prase to json" });
       }
       console.log(children_json);
-      res.json({ children: JSON.parse(children_json), result: JSON.parse(result_json),children_weight:children[0].weight });
+      res.json({
+        children: JSON.parse(children_json),
+        result: JSON.parse(result_json),
+        children_weight: children[0].weight,
+        commentAndScore: get_info_by_screeing_json,
+      });
     } catch (error) {
       console.log(error);
       res.status(500).json({
-
         error: `An error occurred while creating the screening comment. ${error}`,
       });
     }
@@ -72,7 +85,6 @@ router.get(
     } catch (error) {
       console.log(error);
       res.status(500).json({
-
         error: `An error occurred while creating the screening comment. ${error}`,
       });
     }
@@ -89,7 +101,8 @@ router.get(
     let address = req.params.address == "null" ? null : req.params.address;
     const province = req.params.province;
 
-    let zip_code = req.params.zip_code == "null" ? null : parseInt(req.params.zip_code);
+    let zip_code =
+      req.params.zip_code == "null" ? null : parseInt(req.params.zip_code);
     // const image = req.params.image;
     const gender_id = req.params.gender_id;
     const total_child = req.params.total_child;
@@ -99,19 +112,18 @@ router.get(
     console.log(comment);
     const get_chld_ID_4create = await prisma.children.findMany({
       select: {
-        id: true
+        id: true,
       },
       orderBy: {
-        id: 'desc'
+        id: "desc",
       },
-      take: 1
-    })
-    const only_id_4create = Number(get_chld_ID_4create[0].id)
+      take: 1,
+    });
+    const only_id_4create = Number(get_chld_ID_4create[0].id);
 
     try {
       const newComment = await prisma.children.create({
         data: {
-
           id: only_id_4create + 1,
 
           name: child_name,
@@ -121,8 +133,8 @@ router.get(
           // district_id: parseInt(district),
           // sub_district_id: parseInt(sub_district),
           zip_code: zip_code,
-          image_file_name: 'no',
-          image_content_type: 'no',
+          image_file_name: "no",
+          image_content_type: "no",
           image_file_size: 0,
           user_id: parseInt(uid),
           gender_id: parseInt(gender_id),
@@ -140,18 +152,17 @@ router.get(
     const get_chld_ID = await prisma.children.findMany({
       where: {
         name: child_name,
-        user_id: parseInt(uid)
+        user_id: parseInt(uid),
       },
       select: {
-        id: true
+        id: true,
       },
       orderBy: {
-        id: 'desc'
+        id: "desc",
       },
-      take: 1
-    })
-    const only_id = Number(get_chld_ID[0].id)
-
+      take: 1,
+    });
+    const only_id = Number(get_chld_ID[0].id);
 
     // child_id:only_id
     res.json({ Status: `Add child success information`, child_id: only_id });
@@ -169,20 +180,29 @@ router.get(
     const birth_after_effect = req.params.birth_after_effect;
     const health = req.params.health;
     let weight = req.params.weight == "null" ? null : req.params.weight;
-    let pregnancy_description = req.params.pregnancy_description == "null" ? null : req.params.pregnancy_description;
+    let pregnancy_description =
+      req.params.pregnancy_description == "null"
+        ? null
+        : req.params.pregnancy_description;
     req.params.birth_after_effect_description;
-    let health_description = req.params.health_description == "null" ? null : req.params.health_description;
-    let birth_category_description = req.params.birth_category_description == "null" ? null : req.params.birth_category_description;
+    let health_description =
+      req.params.health_description == "null"
+        ? null
+        : req.params.health_description;
+    let birth_category_description =
+      req.params.birth_category_description == "null"
+        ? null
+        : req.params.birth_category_description;
     const get_chld_ID_4create = await prisma.children.findMany({
       select: {
-        id: true
+        id: true,
       },
       orderBy: {
-        id: 'desc'
+        id: "desc",
       },
-      take: 1
-    })
-    const only_id_4create = Number(get_chld_ID_4create[0].id)
+      take: 1,
+    });
+    const only_id_4create = Number(get_chld_ID_4create[0].id);
 
     try {
       const newComment = await prisma.child_pregnancies.create({
