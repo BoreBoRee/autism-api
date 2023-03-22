@@ -170,9 +170,15 @@ router.get(
   async function (req: Request, res: Response, next: NextFunction) {
     var gender = Number(req.params.gender_id);
     var province = Number(req.params.province_id);
-    var time = req.params.time;
+    var timeStart = req.params.timeStart;
+    var timeEnd = req.params.timeEnd;
     var gender_sort, time_sort;
     var  province_sort;
+    // if (timeStart != 0){
+
+    // }
+    // if (timeEnd != 0){
+    // }
     if (province != 0) {
       province_sort = province;
       console.log("province", province_sort);
@@ -197,7 +203,12 @@ router.get(
       for (let i = 1; i <= 20; i++) {
         const question_answer_false = await prisma.children
           .findMany({
+            
             where: {
+              created_at: {
+                gte: new Date(timeStart),
+                lte: new Date(timeEnd)
+              },
               province_id: province_sort,
               gender_id: gender_sort,
               screenings: {
