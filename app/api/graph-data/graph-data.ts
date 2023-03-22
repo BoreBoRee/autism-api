@@ -166,7 +166,7 @@ router.get(
   }
 );
 router.get(
-  "/data-sorting/:province_id/:gender_id/:time",
+  "/data-sorting/:province_id/:gender_id/:timeStart/:timeEnd",
   async function (req: Request, res: Response, next: NextFunction) {
     var gender = Number(req.params.gender_id);
     var province = Number(req.params.province_id);
