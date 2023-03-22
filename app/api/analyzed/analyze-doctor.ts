@@ -40,9 +40,36 @@ router.get(
   }
 );
 router.get(
+  "/analyze-pending",
+  async function (req: Request, res: Response, next: NextFunction) {
+    const user_id_only = await prisma.screening_comments.findMany({
+      select: { user_id: true },
+    })
+    var usernames = [];
+    const username = user_id_only.map(screening_comments => user_id_only.map(screening_comments => usernames.push(screening_comments.user_id)));
+    const screenings = await prisma.screening_comments.findMany({
+      
+      where: {status: "pending" },
+      
+    });
+    console.log(screenings);
+    const screenings_json = jsonRead(screenings);
+    const user_id_only_json = jsonRead(username);
+    if (screenings_json == undefined || user_id_only_json == undefined) {
+      return res.status(500).json({ message: "Can't prase to json" });
+    }
+    console.log(screenings);
+    res.json({ screenings_json: JSON.parse(screenings_json), userid: user_id_only_json });
+  }
+);
+router.get(
   "/analyze-children/pending",
   async function (req: Request, res: Response, next: NextFunction) {
-    
+    const user_id_only = await prisma.screening_comments.findMany({
+      select: { user_id: true },
+    })
+    var usernames = [];
+    const username = user_id_only.map(screening_comments => user_id_only.map(screening_comments => usernames.push(screening_comments.user_id)));
     const screenings = await prisma.screening_comments.findMany({
       
       where: {status: "pending" },
@@ -61,11 +88,12 @@ router.get(
     });
     console.log(screenings);
     const screenings_json = jsonRead(screenings);
-    if (screenings_json == undefined) {
+    const user_id_only_json = jsonRead(username);
+    if (screenings_json == undefined || user_id_only_json == undefined) {
       return res.status(500).json({ message: "Can't prase to json" });
     }
     console.log(screenings);
-    res.json({ screenings_json: JSON.parse(screenings_json) });
+    res.json({ screenings_json: JSON.parse(screenings_json), userid: user_id_only_json });
   }
 );
 
@@ -91,6 +119,7 @@ router.get(
 );
 router.get(
   "/analyze-children/:uid/:child_id/:comment",
+
   async function (req: Request, res: Response, next: NextFunction) {
     const comment = req.params.comment;
     const screening_id = req.params.uid;
