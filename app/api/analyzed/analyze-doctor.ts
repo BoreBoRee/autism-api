@@ -215,7 +215,7 @@ router.get(
           screening_id: parseInt(req.params.child_id),
         },
         data: {
-          id: parseInt(JSON.parse(highestIdComment_json)) + 1,
+          // id: parseInt(JSON.parse(highestIdComment_json)) + 1,
           comment: comment,
           // user_id: parseInt(screening_id),
           doctor_id: 1,
@@ -225,7 +225,7 @@ router.get(
     } catch (error) {
       console.log(error);
       res.status(500).json({
-        error: "An error occurred while creating the screening comment.",
+        error: `An error occurred while creating the screening comment. ${error}`,
       });
     }
 
