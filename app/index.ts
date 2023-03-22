@@ -14,12 +14,15 @@ import send_screening from './api/analyzed/send_screening';
 import score from './api/graph-data/homepage_score';
 import update from './api/user/change_information';
 import media from './api/media/media';
+const fileUpload = require('express-fileupload');
 var express = require("express");
 var cors = require("cors");
 var app = express();
 app.use(cors());
 const port = 5000;
-
+interface RequestWithFiles extends Request {
+    files?: any;
+}
 async function main() {
     app.use('/update', update)
     app.use('/score', score)
@@ -34,6 +37,15 @@ async function main() {
     app.use('/user-auth', user_auth)
     app.use('/demo', demo)
     app.use('/media', media)
+    app.use(fileUpload());
+    app.post('/media_upload', (req: RequestWithFiles, res:Response)  => {
+        console.log(req.files?.file);
+        // if (!req.files?.file) {
+        //     return res.status(500).send('No files were uploaded.');
+        // }
+        // let sampleFile = req.files?.file;
+    })
+
 }
 const prisma = new PrismaClient({
   log: [
