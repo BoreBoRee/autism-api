@@ -184,11 +184,11 @@ router.get(
   }
 );
 router.get(
-  "/analyze-children/:uid/:child_id/:comment",
+  "/analyze-children/:screening/:child_id/:comment",
 
   async function (req: Request, res: Response, next: NextFunction) {
     const comment = req.params.comment;
-    const screening_id = req.params.uid;
+    const screening_id = req.params.screening;
 
     // const time = String(DateTime)
     console.log(comment);
@@ -211,6 +211,7 @@ router.get(
       const newComment = await prisma.screening_comments.updateMany({
         where: {
           // user_id: parseInt(screening_id),
+          child_id: parseInt(req.params.child_id),
           screening_id: parseInt(req.params.child_id),
         },
         data: {
