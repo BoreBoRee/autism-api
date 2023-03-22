@@ -11,7 +11,48 @@ const prisma = new PrismaClient();
 
 // current date
 // adjust 0 before single digit date
+router.get(
+  "/child_on_childID/:child_id/:screeing_id",
+  async function (req: Request, res: Response, next: NextFunction) {
+    const screeing_id = req.params.screeing_id;
+    const child_id = req.params.child_id;
+   
+    
+    try {
+      const result = await prisma.screening_details.findMany({
+        where: { screening_id: Number(screeing_id) },});
+      const result_json = jsonRead(result);
+      if (result_json == undefined) {
+        return res.status(500).json({ message: "Can't prase to json" });
+      }
+      const children_info = await prisma.children.findMany({
+        where: {
+          id: parseInt(child_id),
+        },
+       
+      });
+      const children = await prisma.child_pregnancies.findMany({
+        where:{
+          child_id:parseInt(child_id)
+          
+        },
+        select:{weight:true}
+      });
+      const children_json = jsonRead(children_info);
+      if (children_json == undefined) {
+        return res.status(500).json({ message: "Can't prase to json" });
+      }
+      console.log(children_json);
+      res.json({ children: JSON.parse(children_json), result: JSON.parse(result_json),children_weight:children[0].weight });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
 
+        error: `An error occurred while creating the screening comment. ${error}`,
+      });
+    }
+  }
+);
 router.get(
   "/childe/:userId",
   async function (req: Request, res: Response, next: NextFunction) {

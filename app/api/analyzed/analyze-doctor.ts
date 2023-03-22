@@ -49,14 +49,26 @@ router.get(
       where: {status: "pending", user_id: parseInt(user_id)},
       
     });
+    const get_chld_ID = await prisma.screening_comments.findMany({
+      
+      where: {status: "pending", user_id: parseInt(user_id)},
+      // select: { child_id: true },
+      include: {
+        screenings: {
+          include: {
+            children: { select: { id: true, name: true }},
+              
+      }}}
+    })
+    ;
     console.log(screenings);
     const screenings_json = jsonRead(screenings);
-
-    if (screenings_json == undefined ) {
+    const child_id = jsonRead(get_chld_ID);
+    if (screenings_json == undefined || child_id == undefined) {
       return res.status(500).json({ message: "Can't prase to json" });
     }
     console.log(screenings);
-    res.json({ screenings_json: JSON.parse(screenings_json)});
+    res.json({ screenings_json: JSON.parse(screenings_json), child_id: JSON.parse(child_id)});
   }
 );
 router.get(

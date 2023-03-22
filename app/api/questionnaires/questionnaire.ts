@@ -196,10 +196,25 @@ router.get(
 //     }
 //   }
 // )
+router.get(
+  "/questionnaire/:screening_id",
+  // /questionnaire/517/3/0/1/1/1/1/0/0/0/0/1/0/1/0/1/1/1/1/0/0/0
+  // 1028
+  async function (req: Request, res: Response, next: NextFunction) {
+    const result = await prisma.screening_details.findMany({
+      where: { screening_id: parseInt(req.params.screening_id) },});
+    const result_json = jsonRead(result);
+    if (result_json == undefined) {
+      return res.status(500).json({ message: "Can't prase to json" });
+    }
+    res.json({ result: JSON.parse(result_json) });
+  }
+);
 
 router.get(
   "/questionnaire_send/:child_id/:score/:n1/:n2/:n3/:n4/:n5/:n6/:n7/:n8/:n9/:n10/:n11/:n12/:n13/:n14/:n15/:n16/:n17/:n18/:n19/:n20",
   // /questionnaire_send/517/3/0/1/1/1/1/0/0/0/0/1/0/1/0/1/1/1/1/0/0/0
+  // 1028
   async function (req: Request, res: Response, next: NextFunction) {
     try {
       const child_id = req.params.child_id;
