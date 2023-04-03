@@ -15,6 +15,7 @@ router.get(
         where: {
           child_id: parseInt(req.params.child_id),
         },
+        include: {screening_comments: true,},
         orderBy: {
           created_at: "desc",
         },
@@ -23,6 +24,7 @@ router.get(
         where: {
           child_id: parseInt(req.params.child_id),
         },
+        include: {screening_comments: true,},
         orderBy: [{ score: "desc" }, { created_at: "desc" }],
 
         take: 1,
