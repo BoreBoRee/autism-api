@@ -6,11 +6,35 @@ const timestamp = Date.now();
 var express = require("express");
 var router = express.Router();
 const prisma = new PrismaClient();
-
+router.get(
+  "/analyze-state/finish/:child_id",
+  async function (req: Request, res: Response, next: NextFunction) {
+    try{
+      const child_id = req.params.child_id;
+      const screening_comments = await prisma.screening_comments.findMany({
+       where:{
+        child_id: parseInt(child_id),
+       }
+        
+      });
+      console.log(screening_comments);
+      const screening_comments_json = jsonRead(screening_comments);
+      if (screening_comments_json == undefined) {
+        return res.status(500).json({ message: "Can't prase to json" });
+      }
+      console.log(screening_comments.filter);
+      res.json({ users: JSON.parse(screening_comments_json) });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        error: `An error occurred while creating the screening comment. ${error}`,
+      });
+   
+  }}
+);
 router.get(
   "/analyze-children/finish",
   async function (req: Request, res: Response, next: NextFunction) {
-
     const screening_comments = await prisma.screening_comments.findMany({
       where: {
         status: "finish",
@@ -19,16 +43,13 @@ router.get(
         screenings: {
           include: {
             children: {
-              
               include: {
-                users: { select: { id: true, username: true }},
+                users: { select: { id: true, username: true } },
               },
             },
           },
         },
       },
-
-      
     });
     console.log(screening_comments);
     const screening_comments_json = jsonRead(screening_comments);
@@ -45,22 +66,19 @@ router.get(
     const user_id = req.params.user_id;
     var usernames = [];
     const screenings = await prisma.screening_comments.findMany({
-      
-      where: {status: "pending", user_id: parseInt(user_id)},
-      
+      where: { status: "pending", user_id: parseInt(user_id) },
     });
     const get_chld_ID = await prisma.screening_comments.findMany({
-      
-      where: {status: "pending", user_id: parseInt(user_id)},
+      where: { status: "pending", user_id: parseInt(user_id) },
       // select: { child_id: true },
       include: {
         screenings: {
           include: {
-            children: { select: { id: true, name: true }},
-              
-      }}}
-    })
-    ;
+            children: { select: { id: true, name: true } },
+          },
+        },
+      },
+    });
     console.log(screenings);
     const screenings_json = jsonRead(screenings);
     const child_id = jsonRead(get_chld_ID);
@@ -68,27 +86,27 @@ router.get(
       return res.status(500).json({ message: "Can't prase to json" });
     }
     console.log(screenings);
-    res.json({ screenings_json: JSON.parse(screenings_json), child_id: JSON.parse(child_id)});
+    res.json({
+      screenings_json: JSON.parse(screenings_json),
+      child_id: JSON.parse(child_id),
+    });
   }
 );
 router.get(
   "/analyze-pending-list",
   async function (req: Request, res: Response, next: NextFunction) {
-  
     var usernames = [];
     const screenings = await prisma.screening_comments.findMany({
-      
-      where: {status: "pending" },
-      
+      where: { status: "pending" },
     });
     console.log(screenings);
     const screenings_json = jsonRead(screenings);
 
-    if (screenings_json == undefined ) {
+    if (screenings_json == undefined) {
       return res.status(500).json({ message: "Can't prase to json" });
     }
     console.log(screenings);
-    res.json({ screenings_json: JSON.parse(screenings_json)});
+    res.json({ screenings_json: JSON.parse(screenings_json) });
   }
 );
 router.get(
@@ -97,13 +115,15 @@ router.get(
     const user_id_only = await prisma.screening_comments.findMany({
       select: { user_id: true },
       distinct: ["user_id"],
-    })
+    });
     var usernames = [];
-    const username = user_id_only.map(screening_comments => user_id_only.map(screening_comments => usernames.push(screening_comments.user_id)));
+    const username = user_id_only.map((screening_comments) =>
+      user_id_only.map((screening_comments) =>
+        usernames.push(screening_comments.user_id)
+      )
+    );
     const screenings = await prisma.screening_comments.findMany({
-      
-      where: {status: "pending" },
-      
+      where: { status: "pending" },
     });
     console.log(screenings);
     const screenings_json = jsonRead(screenings);
@@ -112,35 +132,38 @@ router.get(
       return res.status(500).json({ message: "Can't prase to json" });
     }
     console.log(screenings);
-    res.json({ screenings_json: JSON.parse(screenings_json), userid: user_id_only_json });
+    res.json({
+      screenings_json: JSON.parse(screenings_json),
+      userid: user_id_only_json,
+    });
   }
 );
 router.get(
   "/analyze-children/pending",
   async function (req: Request, res: Response, next: NextFunction) {
     const user_id_only = await prisma.screening_comments.findMany({
-      where: {status: "pending" },
+      where: { status: "pending" },
       select: { user_id: true },
       distinct: ["user_id"],
-    })
+    });
     var usernames = [];
-     const screenings = await prisma.screening_comments.findMany({
-      
-      where: {status: "pending" },
+    const screenings = await prisma.screening_comments.findMany({
+      where: { status: "pending" },
       include: {
         screenings: {
           include: {
             children: {
-              
               include: {
-                users: { select: { id: true, username: true, user_contact:true }},
+                users: {
+                  select: { id: true, username: true, user_contact: true },
+                },
               },
             },
           },
         },
       },
     });
-    
+
     const screenings_json = jsonRead(screenings);
     const user_id_only_json = jsonRead(user_id_only);
     console.log(user_id_only[0].user_id);
@@ -148,17 +171,20 @@ router.get(
       name: string;
       information: Record<string, unknown>;
     }
-    
+
     const store: User = {
       name: "John",
-      information: {}
+      information: {},
     };
-    var user ;
-    if (screenings_json == undefined || user_id_only_json == undefined ) {
+    var user;
+    if (screenings_json == undefined || user_id_only_json == undefined) {
       return res.status(500).json({ message: "Can't prase to json" });
     }
-    
-    res.json({ screenings_json: JSON.parse(screenings_json), userid: JSON.parse(user_id_only_json),  });
+
+    res.json({
+      screenings_json: JSON.parse(screenings_json),
+      userid: JSON.parse(user_id_only_json),
+    });
   }
 );
 
@@ -170,9 +196,7 @@ router.get(
       // select: { screening_comments: true, id: true, score: true },
       where: {
         id: Number(user_id),
-        
       },
-      
     });
     console.log(screenings);
     const screenings_json = jsonRead(screenings);
@@ -244,7 +268,7 @@ router.get(
 
     try {
       const id_table = await prisma.screening_comments.findMany({
-        where: { },
+        where: {},
         select: { id: true },
         orderBy: { id: "desc" },
         take: 1,
