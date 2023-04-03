@@ -211,7 +211,9 @@ router.get(
   "/analyze-children/:screening/:child_id/:comment",
 
   async function (req: Request, res: Response, next: NextFunction) {
-    const comment = req.params.comment;
+    
+    try {
+      const comment = req.params.comment;
     const screening_id = req.params.screening;
 
     // const time = String(DateTime)
@@ -231,12 +233,11 @@ router.get(
       return res.status(500).json({ message: "No history" });
     }
 
-    try {
       const newComment = await prisma.screening_comments.updateMany({
         where: {
           // user_id: parseInt(screening_id),
           child_id: parseInt(req.params.child_id),
-          screening_id: parseInt(req.params.child_id),
+          screening_id: parseInt(screening_id),
         },
         data: {
           // id: parseInt(JSON.parse(highestIdComment_json)) + 1,
@@ -246,6 +247,7 @@ router.get(
           status: "finish",
         },
       });
+      res.json({ idLog: jsonRead(highestIdComment?.id), comment: `Comment complete Comment:${comment} child_id: ${req.params.child_id}` });
     } catch (error) {
       console.log(error);
       res.status(500).json({
@@ -253,7 +255,7 @@ router.get(
       });
     }
 
-    res.json({ idLog: jsonRead(highestIdComment?.id), comment: `Comment complete Comment:${comment} child_id: ${req.params.child_id}` });
+   
   }
 );
 // "/analyze_send/:user_id/:child_id/:score/:information",
