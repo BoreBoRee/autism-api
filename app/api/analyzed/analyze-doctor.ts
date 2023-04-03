@@ -253,7 +253,7 @@ router.get(
       });
     }
 
-    res.json({ idLog: jsonRead(highestIdComment?.id) });
+    res.json({ idLog: jsonRead(highestIdComment?.id), comment: `Comment complete Comment:${comment} child_id: ${req.params.child_id}` });
   }
 );
 // "/analyze_send/:user_id/:child_id/:score/:information",
