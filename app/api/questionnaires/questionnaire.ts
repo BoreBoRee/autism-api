@@ -263,10 +263,14 @@ router.get(
           id: 'desc'
         },
         take:1 })
-        console.log(Number(get_ID_4create[0].id )+ 1);
+        console.log(Number(get_ID_4create[0].id ));
+        // const get_ID_4create_json = jsonRead(get_ID_4create);
+        // console.log(Number(get_ID_4create_json)+ 1);
+        var get_ID_4create_Number = Number(get_ID_4create[0].id );
+        console.log(get_ID_4create_Number);
       const screening_questions = await prisma.screening_details.create({
         data: {
-          id: Number(get_ID_4create[i].id) + 1,
+          id: Number(get_ID_4create_Number) + 1,
           screening_question_id: i,
           screening_id: Number(get_chld_ID_4create[0].id ) ,
           answered: Boolean(Number(list_answer[i])),
