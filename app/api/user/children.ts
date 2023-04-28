@@ -237,7 +237,7 @@ router.get(
 );
 // create function to post data to database of child_developers
 router.get(
-  "/childe-developer/:id/:child_id/:eat/:sleep/:urine/:feces/:toilet_problem/:toilet_problem_description/:p_eat/:eat_description/:p_sleep/:sleep_description/:p_urine/:urine_description/:p_feces/:feces_description/:p_toilet_problem",
+  "/childe-developer/:id/:child_id/:eat/:sleep/:urine/:feces/:toilet_problem/:toilet_problem_description/:eat_description/:sleep_description/:urine_description/:feces_description",
   async function (req: Request, res: Response, next: NextFunction) {
     // create parameter from the api route
     const id = req.params.id;
@@ -248,15 +248,15 @@ router.get(
     const feces = req.params.feces;
     const toilet_problem = req.params.toilet_problem;
     const toilet_problem_description = req.params.toilet_problem_description;
-    const p_eat = req.params.p_eat;
+    // const p_eat = req.params.p_eat;
     const eat_description = req.params.eat_description;
-    const p_sleep = req.params.p_sleep;
+    // const p_sleep = req.params.p_sleep;
     const sleep_description = req.params.sleep_description;
-    const p_urine = req.params.p_urine;
+    // const p_urine = req.params.p_urine;
     const urine_description = req.params.urine_description;
-    const p_feces = req.params.p_feces;
+    // const p_feces = req.params.p_feces;
     const feces_description = req.params.feces_description;
-    const p_toilet_problem = req.params.p_toilet_problem;
+    // const p_toilet_problem = req.params.p_toilet_problem;
     // const time = String(DateTime)
     try {
       const newComment = await prisma.child_developers.create({
@@ -268,15 +268,15 @@ router.get(
           feces: feces,
           toilet_problem: toilet_problem,
           toilet_problem_description: toilet_problem_description,
-          p_eat: p_eat,
+          // p_eat: p_eat,
           eat_description: eat_description,
-          p_sleep: p_sleep,
+          // p_sleep: p_sleep,
           sleep_description: sleep_description,
-          p_urine: p_urine,
+          // p_urine: p_urine,
           urine_description: urine_description,
-          p_feces: p_feces,
+          // p_feces: p_feces,
           feces_description: feces_description,
-          p_toilet_problem: p_toilet_problem,
+          // p_toilet_problem: p_toilet_problem,
           child_id: parseInt(child_id),
           id: parseInt(id),
         },
