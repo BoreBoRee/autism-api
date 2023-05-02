@@ -260,13 +260,41 @@ router.get(
 );
 // "/analyze_send/:user_id/:child_id/:score/:information",
 router.get(
-  "/analyze_send/:child_id/:score/:information/:user_id",
+  "/get-child-info/:child_id",
+  async function (req: Request, res: Response, next: NextFunction) {
+    try{
+      const child_id = req.params.child_id;
+      const child_info = await prisma.children.findMany({
+        where: {
+          id: parseInt(child_id),
+        },
+        include: {
+          child_developers: {
+            
+          },
+          child_pregnancies: {}
+        },
+
+      });
+      const child_info_json = jsonRead(child_info);
+      res.json({ child_info: child_info_json });
+
+    }catch(error){
+      console.log(error)
+    }
+
+  }
+)
+router.get(
+  "/analyze_send/:child_id/:score/:information/:user_id/:time_w_child/:relation",
   async function (req: Request, res: Response, next: NextFunction) {
     const user_id = req.params.user_id;
     // const user_id = req.params.user_id;
     const child_id = req.params.child_id;
     const score = req.params.score;
     const information = req.params.information;
+    const time_w_child = req.params.time_w_child;
+    const relation = req.params.relation;
 
     try {
       const id_table = await prisma.screening_comments.findMany({
@@ -284,7 +312,10 @@ router.get(
 
       const screening_comments = await prisma.screening_comments.create({
         data: {
+
           id: Number(id_table[0].id) + 1,
+          time_w_child: time_w_child,
+          relation: relation,
           screening_id: Number(id_table_screening[0].id),
           // user_id: parseInt(user_id),
           information: information,
