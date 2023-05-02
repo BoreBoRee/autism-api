@@ -239,16 +239,8 @@ router.get(
 router.get(
   "/childe-developer/:id/:child_id/:eat/:sleep/:urine/:feces/:toilet_problem/:toilet_problem_description/:eat_description/:sleep_description/:urine_description/:feces_description",
   async function (req: Request, res: Response, next: NextFunction) {
-    const get_chld_ID_4create = await prisma.child_developers.findMany({
-      select: {
-        id: true,
-      },
-      orderBy: {
-        id: "desc",
-      },
-      take: 1,
-    });
-    const only_id_4create = Number(get_chld_ID_4create[0].id);
+    
+    
     // create parameter from the api route
     const id = req.params.id;
     const child_id = req.params.child_id;
@@ -269,6 +261,17 @@ router.get(
     // const p_toilet_problem = req.params.p_toilet_problem;
     // const time = String(DateTime)
     try {
+      const get_chld_ID_4create = await prisma.child_developers.findMany({
+        select: {
+          id: true,
+        },
+        orderBy: {
+          id: "desc",
+        },
+        take: 1,
+      });
+      const only_id_4create = Number(get_chld_ID_4create[0].id);
+      console.log(only_id_4create);
       const newComment = await prisma.child_developers.create({
         data: {
           id: only_id_4create + 1,
@@ -298,7 +301,9 @@ router.get(
         error: `An error occurred while creating the screening comment. ${error}`,
       });
     }
+    res.json({ Status: `Add child-dev success information` });
   }
+  
 );
 
 export default router;
