@@ -277,7 +277,10 @@ router.get(
 
       });
       const child_info_json = jsonRead(child_info);
-      res.json({ child_info: child_info_json });
+      if (child_info_json == undefined) {
+        return res.status(500).json({ message: "Can't prase to json" });
+      }
+      res.json({ child_info:  JSON.parse(child_info_json) });
 
     }catch(error){
       console.log(error)
