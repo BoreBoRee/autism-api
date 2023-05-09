@@ -189,6 +189,56 @@ router.get(
 );
 
 router.get(
+  "/analyze-children/finish",
+  async function (req: Request, res: Response, next: NextFunction) {
+    const user_id_only = await prisma.screening_comments.findMany({
+      where: { status: "finish" },
+      select: { user_id: true },
+      distinct: ["user_id"],
+    });
+    var usernames = [];
+    const screenings = await prisma.screening_comments.findMany({
+      where: { status: "finish" },
+      include: {
+        screenings: {
+          include: {
+            children: {
+              include: {
+                users: {
+                  select: { id: true, username: true, user_contact: true },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    const screenings_json = jsonRead(screenings);
+    const user_id_only_json = jsonRead(user_id_only);
+    console.log(user_id_only[0].user_id);
+    interface User {
+      name: string;
+      information: Record<string, unknown>;
+    }
+
+    const store: User = {
+      name: "John",
+      information: {},
+    };
+    var user;
+    if (screenings_json == undefined || user_id_only_json == undefined) {
+      return res.status(500).json({ message: "Can't prase to json" });
+    }
+
+    res.json({
+      screenings_json: JSON.parse(screenings_json),
+      userid: JSON.parse(user_id_only_json),
+    });
+  }
+);
+
+router.get(
   "/analyze-user_info/:uid",
   async function (req: Request, res: Response, next: NextFunction) {
     const user_id = req.params.uid;
