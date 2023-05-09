@@ -19,14 +19,21 @@ router.get(
       var count = 0;
 
       const user = await prisma.users.findMany().then((data) => (count = data.length));
-      user_quantity = user;;
+      const user_update = await prisma.users.findFirst({
+        orderBy: {
+          created_at: "desc",
+        },
+        select: {created_at: true}
+      });
+      user_quantity = user;
       console.log(user);
       const allUserJson = jsonRead(user);
-      if (allUserJson == undefined) {
+      const user_update_json = jsonRead(user_update?.created_at);
+      if (allUserJson == undefined || user_update_json == undefined) {
         return res.status(500).json({ message: "Can't prase to json" });
       }
       console.log(user);
-      res.json({ users: user_quantity });
+      res.json({ users: user_quantity, time: JSON.parse(user_update_json)});
     }
     catch (error) {
       console.log(error);
