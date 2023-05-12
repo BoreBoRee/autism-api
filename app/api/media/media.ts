@@ -17,14 +17,24 @@ const app = express();
 
 // Set up Multer middleware for handling file uploads
 const storage = multer.diskStorage({
-    destination: path.join(__dirname, '../../../uploads/'),// Specify the destination directory
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    const extension = path.extname(file.originalname);
-    cb(null, uniqueSuffix + extension);
-  },
-});
-const upload = multer({ dest:'uploads/' });
+
+    destination: async (req, file, cb) => {
+        const uploadPath = path.join(__dirname, 'uploads');
+        try {
+          await fs.access(uploadPath);
+        } catch (error) {
+          await fs.mkdir(uploadPath);
+        }
+        cb(null, uploadPath);
+      },
+    filename: (req, file, cb) => {
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+      const extension = path.extname(file.originalname);
+      cb(null, uniqueSuffix + extension);
+    },
+  });
+const upload = multer({ storage });
+
 
 // File upload endpoint
 router.post('/upload', upload.single('image'), async (req: Request, res: Response) => {
