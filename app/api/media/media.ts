@@ -24,7 +24,7 @@ const upload = multer({
   // File
 
 // File upload endpoint
-app.post('/upload', upload.single('image'), async (req: Request, res: Response) => {
+router.post('/upload', upload.single('image'), async (req: Request, res: Response) => {
     // Access the uploaded file details from `req.file`
     if (!req.file) {
       res.status(400).send('No file uploaded');
