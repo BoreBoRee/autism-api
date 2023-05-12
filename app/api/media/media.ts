@@ -12,7 +12,7 @@ const bodyParser = require('body-parser');
 const multer = require('multer');
 // import multer from 'multer';
 
-const upload = multer({
+const upload = multer.diskStorage({
     dest: 'uploads/',
     fileFilter: (req:Request, file:File, cb:Function) => {
       // File filter logic (optional)
