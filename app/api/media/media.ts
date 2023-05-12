@@ -44,8 +44,9 @@ router.post('/upload', upload.single('image'), async (req: Request, res: Respons
 //   });
 
   // Move the uploaded file to a different directory
-  const newPath = filePath.replace('uploads/', 'new-directory/');
-  await fs.rename(filePath, newPath);
+//   const newPath = filePath.replace('uploads/', 'new-directory/');
+//   await fs.rename(filePath, newPath);
+  console.log('File uploaded:', filePath);
 
   res.send('File uploaded successfully');
 });
