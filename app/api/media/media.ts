@@ -17,7 +17,7 @@ const app = express();
 
 // Set up Multer middleware for handling file uploads
 const storage = multer.diskStorage({
-  destination: 'uploads/', // Specify the destination directory
+    destination: path.join(__dirname, '../../../uploads/'),// Specify the destination directory
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
     const extension = path.extname(file.originalname);
