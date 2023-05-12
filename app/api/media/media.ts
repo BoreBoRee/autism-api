@@ -17,11 +17,11 @@ const app = express();
 
 // Set up Multer middleware for handling file uploads
 const storage = multer.diskStorage({
-
     destination: async (req, file, cb) => {
         const uploadPath = path.join(__dirname, 'uploads');
         try {
-            console.log("file are exist");
+          await fs.access(uploadPath);
+          console.log("file are exist");
         } catch (error) {
           await fs.mkdir(uploadPath);
           console.log("file are NOT exist");
@@ -35,7 +35,6 @@ const storage = multer.diskStorage({
     },
   });
 const upload = multer({ storage });
-
 
 // File upload endpoint
 router.post('/upload', upload.single('image'), async (req: Request, res: Response) => {
