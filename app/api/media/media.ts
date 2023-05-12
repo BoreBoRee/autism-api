@@ -20,9 +20,10 @@ const storage = multer.diskStorage({
     destination: async (req, file, cb) => {
         const uploadPath = path.join(__dirname, 'uploads');
         try {
-          await fs.access(uploadPath);
+            console.log("file are exist");
         } catch (error) {
           await fs.mkdir(uploadPath);
+          console.log("file are NOT exist");
         }
         cb(null, uploadPath);
       },
