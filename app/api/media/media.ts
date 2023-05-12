@@ -16,10 +16,12 @@ const multer = require('multer');
 
 const storage = multer.diskStorage({
     destination: 'uploads/', // Specify the destination directory
-    filename: (req:Request, file:File, cb:Function) => {
-      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-      const extension = path.extname(file.name);
-      cb(null, uniqueSuffix + extension);
+    fileFilter: (req:Request, file:File, cb:Function) => {
+    // filename: (req:Request, file:File, cb:Function) => {
+    //   const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    //   const extension = path.extname(file.name);
+    //   cb(null, uniqueSuffix + extension);
+      cb(null, true);
     },
   });
   const upload = multer({ storage });
