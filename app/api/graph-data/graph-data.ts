@@ -213,69 +213,44 @@ router.get(
 
     let store_answer: { [key: string]: number } = {};
     let count: number;
-
     try {
       for (let i = 1; i <= 20; i++) {
-        const question_answer_false = await prisma.children.findMany({
-          where: {
-            created_at: {
-              gte: timeStart_sort,
-              lte: timeEnd_sort,
-            },
-            province_id: province_sort,
-            gender_id: gender_sort,
-            screenings: {
-              some: {
-                screening_details: {
-                  some: { screening_question_id: i, answered: true },
-                },
-              },
-            },
-          },
-          include: {
-            screenings: {
-              include: {
-                screening_details: {
-                  where: { answered: true, screening_question_id: 3 },
-                },
-              },
-            },
-          },
-        }).then((data) => (count = data.length));
+      const question_answer_false = await prisma.screening_details.findMany({
+            where: {
+              created_at: {
+                      gte: timeStart_sort,
+                      lte: timeEnd_sort,
+                    },
+                    screenings: {children:{
+                      province_id: province_sort,
+                          gender_id: gender_sort,
 
+                    }},
+                  
+              answered: false, screening_question_id: i},
+
+        }).then((data) => (count = data.length));
         store_answer[`${i}_false`] = question_answer_false;
-
-        const question_answer_true = await prisma.children.findMany({
+        const question_answer_true = await prisma.screening_details.findMany({
           where: {
             created_at: {
-              gte: timeStart_sort,
-              lte: timeEnd_sort,
-            },
-            province_id: province_sort,
-            gender_id: gender_sort,
-            screenings: {
-              some: {
-                screening_details: {
-                  some: { screening_question_id: i, answered: true },
-                },
-              },
-            },
-          },
-          include: {
-            screenings: {
-              include: {
-                screening_details: {
-                  where: { answered: true, screening_question_id: 3 },
-                },
-              },
-            },
-          },
-        }).then((data) => (count = data.length));
+                    gte: timeStart_sort,
+                    lte: timeEnd_sort,
+                  },
+                  screenings: {children:{
+                    province_id: province_sort,
+                        gender_id: gender_sort,
 
-        store_answer[`${i}_true`] = question_answer_true;
+                  }},
+                
+            answered: true, screening_question_id: i},
+
+      }).then((data) => (count = data.length));
+      store_answer[`${i}_true`] = question_answer_true;
       }
-
-      res.json({ data: store_answer });
+     
+      console.log(store_answer);
+      res.json({ data: store_answer});
     } catch (error) {
       console.log(error);
       res.status(500).json({

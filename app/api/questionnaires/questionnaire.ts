@@ -157,45 +157,6 @@ router.get(
   }
 );
 
-// router.get(
-//   "/test/:array",
-//   async function (req: Request, res: Response, next: NextFunction) {
-//     try {
-//       var list = String(req.params.array);
-//       let array_l;
-//       var array_2 = Array(array_l);
-//       // if (list == undefined) {
-//       //   array_l = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
-//       // }
-//       // else {
-//       //   array_l = list;
-//       // }
-
-      
-      
-//       var i;
-//       for (i = 0; i < list.length; i++) {
-//        if (list[i] !== "[" || list[i] !== "]" || list[i] !== " " || list[i] !== ","){
-//         array_2.push(list[i]);
-//         console.log(array_2);
-         
-//        }
-        
-    
-//       };
-//       res.json({
-
-//         helper: array_2,
-//       });}
-//     catch (error) {
-//       console.log(error);
-//       res.status(500).json({
-
-//         error: `An error occurred while creating the screening comment. ${error}`,
-//       });
-//     }
-//   }
-// )
 router.get(
   "/questionnaire/:screening_id",
   // /questionnaire/517/3/0/1/1/1/1/0/0/0/0/1/0/1/0/1/1/1/1/0/0/0
