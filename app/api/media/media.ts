@@ -14,37 +14,47 @@ var router = express.Router();
 // import multer from 'multer';
 
 const app = express();
-
+const DIR = `.${process.env.UPLOAD_DIR}` || './uploads';
 // Set up Multer middleware for handling file uploads
+// let storage = multer.diskStorage({
+//     destination: async (req, file, cb) => {
+//         const uploadPath = path.join(__dirname, 'uploads');
+//         try {
+//           await fs.access(uploadPath);
+//           console.log("file are exist");
+//         } catch (error) {
+//           await fs.mkdir(uploadPath);
+//           console.log("file are NOT exist");
+//         }
+//         cb(null, uploadPath);
+//       },
+//     filename: (req, file, cb) => {
+//       const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+//       const extension = path.extname(file.originalname);
+//       cb(null, uniqueSuffix + extension);
+//     },
+//   });
 const storage = multer.diskStorage({
-    destination: async (req, file, cb) => {
-        const uploadPath = path.join(__dirname, 'uploads');
-        try {
-          await fs.access(uploadPath);
-          console.log("file are exist");
-        } catch (error) {
-          await fs.mkdir(uploadPath);
-          console.log("file are NOT exist");
-        }
-        cb(null, uploadPath);
-      },
-    filename: (req, file, cb) => {
-      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-      const extension = path.extname(file.originalname);
-      cb(null, uniqueSuffix + extension);
+    destination: (req, file, cb) => {
+        cb(null, DIR);
     },
-  });
+    filename: (req, file, cb) => {
+        cb(null, file.fieldname + '-' + Date.now() + '.' + path.extname(file.originalname));
+    }
+});
 const upload = multer({ storage });
 
 // File upload endpoint
-router.post('/upload', upload.single('image'), async (req: Request, res: Response) => {
+router.post('/upload', upload.single('photo'), async (req: Request, res: Response) => {
   if (!req.file) {
     res.status(400).send('No file uploaded');
-    return;
+    return res.send({ success: false });
   }
-
+  else {
+    console.log("file received",req.file);
+    return res.send({ success: true, filename: req.file.filename });}
   // Process and save the file using Prisma
-  const { filename, path: filePath, originalname } = req.file;
+  // const { filename, path: filePath, originalname } = req.file;
 //   const uploadedFile = await prisma.file.create({
 //     data: {
 //       filename,
@@ -56,11 +66,16 @@ router.post('/upload', upload.single('image'), async (req: Request, res: Respons
   // Move the uploaded file to a different directory
 //   const newPath = filePath.replace('uploads/', 'new-directory/');
 //   await fs.rename(filePath, newPath);
-  console.log('File uploaded:', filePath);
+  // console.log('File uploaded:', filePath);
 
-  res.send('File uploaded successfully');
+  // res.send('File uploaded successfully');
 });
+// router.get('/', async (req: Request, res: Response) => {
+//   var filepath = path.resolve(process.env.UPLOAD_DIR || './uploads');
+//   filepath = filepath.replace(/\.[%/.]+$/, ".webp");
+//   const r = fs.createReadStream(filepath);
 
+// }
 // const storage = multer.diskStorage({
 //     destination: 'uploads/', // Specify the destination directory
 //     fileFilter: (req:Request, file:File, cb:Function) => {
