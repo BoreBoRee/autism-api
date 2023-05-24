@@ -4,7 +4,9 @@ FROM node:14
 
 # Set the working directory to /app
 WORKDIR /app
-RUN mkdir /app/api/media/images
+RUN cd /app/api/media
+
+RUN mkdir /images
 # Install dependencies
 COPY package*.json ./
 # generated prisma files
