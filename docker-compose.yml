@@ -9,6 +9,6 @@ services:
       - 3001:5000
     environment:
       - UPLOAD_PATH=/images
-      - UPLOADED_PATH=/images
+      - UPLOADED_PATH=/app/api/media/images
     volumes:
-      - ./images:/images
+      - ./images:/app/api/media/images
