@@ -74,7 +74,7 @@ router.post('/upload', upload.single('image'), async (req: Request, res: Respons
   // res.send('File uploaded successfully');
 });
 router.get('/uploads/:fileimage', async (req: Request, res: Response) => {
-  var filepath = path.resolve('/images', req.params.fileimage);
+  var filepath = path.resolve('../../../images', req.params.fileimage);
   filepath = filepath.replace(/\.[%/.]+$/, ".webp");
   const r = createReadStream(filepath);
   const ps = new stream.PassThrough();
