@@ -38,7 +38,7 @@ const app = express();
 //   });
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-      const uploadPath = path.join(__dirname, '/app/app/api/media/images');
+      const uploadPath = path.join(__dirname, '/images');
         cb(null, uploadPath);
     },
     filename: (req, file, cb) => {
@@ -74,7 +74,7 @@ router.post('/upload', upload.single('image'), async (req: Request, res: Respons
   // res.send('File uploaded successfully');
 });
 router.get('/uploads/:fileimage', async (req: Request, res: Response) => {
-  var filepath = path.resolve('/images', req.params.fileimage);
+  var filepath = path.resolve('./././images', req.params.fileimage);
   filepath = filepath.replace(/\.[%/.]+$/, ".webp");
   const r = createReadStream(filepath);
   const ps = new stream.PassThrough();
@@ -88,44 +88,5 @@ router.get('/uploads/:fileimage', async (req: Request, res: Response) => {
   ps.pipe(res);
 });
 
-
-
-// const storage = multer.diskStorage({
-//     destination: 'uploads/', // Specify the destination directory
-//     fileFilter: (req:Request, file:File, cb:Function) => {
-//     // filename: (req:Request, file:File, cb:Function) => {
-//     //   const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-//     //   const extension = path.extname(file.name);
-//     //   cb(null, uniqueSuffix + extension);
-//       cb(null, true);
-//     },
-//   });
-//   const upload = multer({ storage });
-//   // File
-
-// // File upload endpoint
-// router.post('/upload', upload.single('image'), async (req: Request, res: Response) => {
-//     // Access the uploaded file details from `req.file`
-//     if (!req.file) {
-//       res.status(400).send('No file uploaded');
-//       return;
-//     }
-  
-//     console.log(req.file);
-//     const { filename, path: filePath, originalname } = req.file;
-//     // const newPath = path.replace('uploads/', 'new-directory/');
-//     // fs.renameSync(path, newPath);
-//     // Process and save the file using Prisma
-//     // const { filename, path } = req.file;
-//     // const uploadedFile = await prisma.file.create({
-//     //   data: {
-//     //     filename,
-//     //     path
-//     //   }
-//     // });
-  
-//     res.send('File uploaded successfully');
-//   });
-  
 
 export default router;
