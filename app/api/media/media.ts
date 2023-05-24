@@ -14,7 +14,7 @@ var router = express.Router();
 // import multer from 'multer';
 
 const app = express();
-const DIR = `.${process.env.UPLOAD_PATH}`;
+// const DIR = `.${process.env.UPLOAD_PATH}`;
 // Set up Multer middleware for handling file uploads
 // let storage = multer.diskStorage({
 //     destination: async (req, file, cb) => {
