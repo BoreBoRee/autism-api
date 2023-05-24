@@ -7,8 +7,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - 3001:5000
-    environment:
-      - UPLOAD_PATH=/images
-      - UPLOADED_PATH=/app/api/media/images
+    # environment:
+    #   - UPLOAD_PATH=/images
+    #   - UPLOADED_PATH=/app/api/media/images
     volumes:
-      - ./images:/app/api/media/images
+      - ./images:/app/app/api/media/images
