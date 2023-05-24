@@ -3,6 +3,8 @@ import express, { Request, Response } from 'express';
 import multer, { Multer } from 'multer';
 import path, { PlatformPath } from 'path';
 import { promises as fs } from 'fs';
+import { createReadStream } from 'fs';
+import stream from 'stream';
 // import prisma from './prisma';
 
 
@@ -71,12 +73,23 @@ router.post('/upload', upload.single('image'), async (req: Request, res: Respons
 
   // res.send('File uploaded successfully');
 });
-// router.get('/', async (req: Request, res: Response) => {
-//   var filepath = path.resolve(process.env.UPLOAD_DIR || './uploads');
-//   filepath = filepath.replace(/\.[%/.]+$/, ".webp");
-//   const r = fs.createReadStream(filepath);
+router.get('/uploads/:fileimage', async (req: Request, res: Response) => {
+  var filepath = path.resolve(process.env.UPLOAD_DIR || './uploads');
+  filepath = filepath.replace(/\.[%/.]+$/, ".webp");
+  const r = createReadStream(filepath);
+  const ps = new stream.PassThrough();
+  stream.pipeline(r, ps, (err) => {
+    if (err) {
+      console.log(err);
+      return res.sendStatus(400);
+    }
+  }
+  );
+  ps.pipe(res);
+});
 
-// }
+
+
 // const storage = multer.diskStorage({
 //     destination: 'uploads/', // Specify the destination directory
 //     fileFilter: (req:Request, file:File, cb:Function) => {
