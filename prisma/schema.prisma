@@ -183,6 +183,7 @@ model screening_comments {
   screening_id BigInt?
   doctor_id    BigInt?
   child_id     BigInt?
+  image_file_name    String?              @db.VarChar
   status      String?     @db.VarChar
   relation      String?     @db.VarChar
   time_w_child      String?     @db.VarChar
