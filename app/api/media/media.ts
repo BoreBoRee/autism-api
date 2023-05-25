@@ -22,7 +22,8 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // File upload endpoint
-router.post('/upload', upload.single('image'), async (req: Request, res: Response) => {
+router.post('/upload/:screening_id', upload.single('image'), async (req: Request, res: Response) => {
+  const screening_id = req.params.screening_id;
   if (!req.file) {
     res.status(400).send('No file uploaded');
     return res.send({ success: false });
