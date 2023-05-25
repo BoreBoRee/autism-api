@@ -298,6 +298,8 @@ router.get(
     // สัดส่วน 2< 3> 4> 5> 6>> บุตร
     // ผปค 16-20, 21-25, 26-30, 31-35, 36-40, 41-45, 46-50 50++
     var list = new Array();
+    let all: number = 0;
+    let all2: number = 0;
     let store_year: { [key: string]: number } = {
       "0-16": 0,
       "16-20": 0,
@@ -308,8 +310,6 @@ router.get(
       "41-45": 0,
       "46-50": 0,
       "50++": 0,
-      all: 0,
-      all2: 0,
     };
     const now = new Date();
     const year_now = now.getFullYear();
@@ -332,7 +332,7 @@ router.get(
         year = list[0][i]["birthday"].getFullYear();
 
         if (list[0][i]["birthday"] != null) {
-          store_year["all2"] = store_year["all2"] + 1 || 1;
+          all2 = all2 + 1 || 1;
           console.log(year);
           year_cal = year_now - year;
 
@@ -357,12 +357,12 @@ router.get(
           }
         }
       }
-      store_year["all"] = count;
+      all = count;
 
       if (gender_json == undefined) {
         return res.status(500).json({ message: "Can't prase to json" });
       }
-      res.json({ data: store_year });
+      res.json({ data: store_year, all_user_haveData: all, all_user: all2 });
     } catch (error) {
       console.log(error);
       res.status(500).json({
@@ -384,9 +384,9 @@ router.get(
       "4-5": 0,
       "5-6": 0,
       "6++": 0,
-      all: 0,
-      all2: 0,
     };
+    let all: number = 0;
+    let all2: number = 0;
     const now = new Date();
     const year_now = now.getFullYear();
     try {
@@ -408,7 +408,7 @@ router.get(
         year = list[0][i]["birthday"].getFullYear();
 
         if (list[0][i]["birthday"] != null) {
-          store_year["all2"] = store_year["all2"] + 1 || 1;
+          all2 = all2 + 1 || 1;
           console.log(year);
           year_cal = year_now - year;
 
@@ -431,12 +431,12 @@ router.get(
           }
         }
       }
-      store_year["all"] = count;
+      all = count;
 
       if (gender_json == undefined) {
         return res.status(500).json({ message: "Can't prase to json" });
       }
-      res.json({ data: store_year });
+      res.json({ data: store_year, all_user_haveData: all, all_user: all2 });
     } catch (error) {
       console.log(error);
       res.status(500).json({
