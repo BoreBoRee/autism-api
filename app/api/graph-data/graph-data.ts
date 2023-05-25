@@ -299,15 +299,15 @@ router.get(
     let all: number = 0;
     let all2: number = 0;
     let store_year: { [key: string]: number } = {
-      "0-16": 0,
-      "16-20": 0,
-      "21-25": 0,
-      "26-30": 0,
-      "31-35": 0,
-      "36-40": 0,
-      "41-45": 0,
-      "46-50": 0,
-      "50++": 0,
+      "0-16 ปี": 0,
+      "16-20 ปี": 0,
+      "21-25 ปี": 0,
+      "26-30 ปี": 0,
+      "31-35 ปี": 0,
+      "36-40 ปี": 0,
+      "41-45 ปี": 0,
+      "46-50 ปี": 0,
+      "50 ปีขึ้นไป": 0,
     };
     const now = new Date();
     const year_now = now.getFullYear();
@@ -335,23 +335,23 @@ router.get(
           year_cal = year_now - year;
 
           if (year_cal >= 0 && year_cal <= 16) {
-            store_year["0-16"] = store_year["0-16"] + 1 || 1;
+            store_year["0-16 ปี"] = store_year["0-16 ปี"] + 1 || 1;
           } else if (year_cal >= 16 && year_cal <= 20) {
-            store_year["16-20"] = store_year["16-20"] + 1 || 1;
+            store_year["16-20 ปี"] = store_year["16-20 ปี"] + 1 || 1;
           } else if (year_cal >= 21 && year_cal <= 25) {
-            store_year["21-25"] = store_year["21-25"] + 1 || 1;
+            store_year["21-25 ปี"] = store_year["21-25 ปี"] + 1 || 1;
           } else if (year_cal >= 26 && year_cal <= 30) {
-            store_year["26-30"] = store_year["26-30"] + 1 || 1;
+            store_year["26-30 ปี"] = store_year["26-30 ปี"] + 1 || 1;
           } else if (year_cal >= 31 && year_cal <= 35) {
-            store_year["31-35"] = store_year["31-35"] + 1 || 1;
+            store_year["31-35 ปี"] = store_year["31-35 ปี"] + 1 || 1;
           } else if (year_cal >= 36 && year_cal <= 40) {
-            store_year["36-40"] = store_year["36-40"] + 1 || 1;
+            store_year["36-40 ปี"] = store_year["36-40 ปี"] + 1 || 1;
           } else if (year_cal >= 41 && year_cal <= 45) {
-            store_year["41-45"] = store_year["41-45"] + 1 || 1;
+            store_year["41-45 ปี"] = store_year["41-45 ปี"] + 1 || 1;
           } else if (year_cal >= 46 && year_cal <= 50) {
-            store_year["46-50"] = store_year["46-50"] + 1 || 1;
+            store_year["46-50 ปี"] = store_year["46-50 ปี"] + 1 || 1;
           } else if (year_cal >= 50) {
-            store_year["50++"] = store_year["50++"] + 1 || 1;
+            store_year["50 ปีขึ้นไป"] = store_year["50 ปีขึ้นไป"] + 1 || 1;
           }
         }
       }
@@ -376,12 +376,15 @@ router.get(
     // สัดส่วน 2< 3> 4> 5> 6>> บุตร
     var list = new Array();
     let store_year: { [key: string]: number } = {
-      "0-2": 0,
-      "2-3": 0,
-      "3-4": 0,
-      "4-5": 0,
-      "5-6": 0,
-      "6++": 0,
+      "0-2 ปี": 0,
+      "2-3 ปี": 0,
+      "3-4 ปี": 0,
+      "4-5 ปี": 0,
+      "5-6 ปี": 0,
+      "6 ปีขึ้นไป": 0,
+    };
+    let store_show: { [key: string]: string } = {
+      
     };
     let all: number = 0;
     let all2: number = 0;
@@ -411,26 +414,26 @@ router.get(
           year_cal = year_now - year;
 
           if (year_cal >= 0 && year_cal <= 2) {
-            store_year["0-2"] = store_year["0-2"] + 1 || 1;
+            store_year["0-2 ปี"] = store_year["0-2 ปี"] + 1 || 1;
           } else if (year_cal >= 2 && year_cal <= 3) {
-            store_year["2-3"] = store_year["2-3"] + 1 || 1;
+            store_year["2-3 ปี"] = store_year["2-3 ปี"] + 1 || 1;
           }
           if (year_cal >= 3 && year_cal <= 4) {
-            store_year["3-4"] = store_year["3-4"] + 1 || 1;
+            store_year["3-4 ปี"] = store_year["3-4 ปี"] + 1 || 1;
           }
           if (year_cal >= 4 && year_cal <= 5) {
-            store_year["4-5"] = store_year["4-5"] + 1 || 1;
+            store_year["4-5 ปี"] = store_year["4-5 ปี"] + 1 || 1;
           }
           if (year_cal >= 5 && year_cal <= 6) {
-            store_year["5-6"] = store_year["5-6"] + 1 || 1;
+            store_year["5-6 ปี"] = store_year["5-6 ปี"] + 1 || 1;
           }
           if (year_cal >= 6) {
-            store_year["6++"] = store_year["6++"] + 1 || 1;
+            store_year["6 ปีขึ้นไป"] = store_year["6 ปีขึ้นไป"] + 1 || 1;
           }
         }
       }
       all = count;
-
+      
       if (gender_json == undefined) {
         return res.status(500).json({ message: "Can't prase to json" });
       }
