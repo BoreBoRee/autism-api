@@ -152,11 +152,8 @@ router.get(
         })
         .then((data) => (count = data.length));
       store_answer["อื่นๆ"] = getGender_other;
-      // const getGender_json = jsonRead(getGender);
-      // if (getGender_json == undefined) {
-      //   return res.status(500).json({ message: "Can't prase to json" });
-      // }users: JSON.parse(getGender_json)
-      res.json({ data: store_answer });
+      
+      res.json({ data: store_answer, all_user_haveData: store_answer["ชาย"] + store_answer["หญิง"]+ store_answer["อิ่นๆ"] , all_user: store_answer["ชาย"] + store_answer["หญิง"]+ store_answer["อิ่นๆ"]  });
     } catch (error) {
       console.log(error);
       res.status(500).json({
