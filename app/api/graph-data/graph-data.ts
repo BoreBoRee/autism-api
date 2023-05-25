@@ -152,8 +152,9 @@ router.get(
         })
         .then((data) => (count = data.length));
       store_answer["อื่นๆ"] = getGender_other;
-      
-      res.json({ data: store_answer, all_user_haveData: store_answer["ชาย"] + store_answer["หญิง"]+ store_answer["อิ่นๆ"] , all_user: store_answer["ชาย"] + store_answer["หญิง"]+ store_answer["อิ่นๆ"]  });
+      console.log();
+      const all_children = (getGender_boy + getGender_dauther + getGender_other)
+      res.json({ data: store_answer, all_user_haveData: all_children , all_user: all_children });
     } catch (error) {
       console.log(error);
       res.status(500).json({
@@ -359,7 +360,7 @@ router.get(
       if (gender_json == undefined) {
         return res.status(500).json({ message: "Can't prase to json" });
       }
-      res.json({ data: store_year, all_user_haveData: all, all_user: all2 });
+      res.json({ data: store_year, all_user: all, all_user_haveData: all2 });
     } catch (error) {
       console.log(error);
       res.status(500).json({
@@ -433,7 +434,7 @@ router.get(
       if (gender_json == undefined) {
         return res.status(500).json({ message: "Can't prase to json" });
       }
-      res.json({ data: store_year, all_user_haveData: all, all_user: all2 });
+      res.json({ data: store_year, all_user: all, all_user_haveData: all2 });
     } catch (error) {
       console.log(error);
       res.status(500).json({
