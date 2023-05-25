@@ -32,6 +32,7 @@ router.post('/upload/:screening_id', upload.single('image'), async (req: Request
     console.log("file received",req.file);
     const uploadedFile = await prisma.screening_comments.updateMany({
       where: {
+        
         screening_id: Number(screening_id),
       },
       data: {
