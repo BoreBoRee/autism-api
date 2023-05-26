@@ -9,13 +9,12 @@ const prisma = new PrismaClient();
 router.get(
   "/analyze-state/finish/:child_id",
   async function (req: Request, res: Response, next: NextFunction) {
-    try{
+    try {
       const child_id = req.params.child_id;
       const screening_comments = await prisma.screening_comments.findMany({
-       where:{
-        child_id: parseInt(child_id),
-       }
-        
+        where: {
+          child_id: parseInt(child_id),
+        },
       });
       console.log(screening_comments);
       const screening_comments_json = jsonRead(screening_comments);
@@ -29,8 +28,8 @@ router.get(
       res.status(500).json({
         error: `An error occurred while creating the screening comment. ${error}`,
       });
-   
-  }}
+    }
+  }
 );
 // router.get(
 //   "/analyze-children/finish",
@@ -204,8 +203,6 @@ router.get(
       information: Record<string, unknown>;
     }
 
-   
-   
     if (screenings_json == undefined || user_id_only_json == undefined) {
       return res.status(500).json({ message: "Can't prase to json" });
     }
@@ -251,7 +248,6 @@ router.get(
       information: Record<string, unknown>;
     }
 
-    
     if (screenings_json == undefined || user_id_only_json == undefined) {
       return res.status(500).json({ message: "Can't prase to json" });
     }
@@ -286,27 +282,26 @@ router.get(
   "/analyze-children/:screening/:child_id/:comment",
 
   async function (req: Request, res: Response, next: NextFunction) {
-    
     try {
       const comment = req.params.comment;
-    const screening_id = req.params.screening;
+      const screening_id = req.params.screening;
 
-    // const time = String(DateTime)
-    console.log(comment);
-    const highestIdComment = await prisma.screening_comments.findFirst({
-      orderBy: {
-        id: "desc",
-      },
-      select: { id: true },
-    });
-    console.log(highestIdComment?.id);
-    const highestIdComment_json = jsonRead(highestIdComment);
-    if (highestIdComment_json == undefined) {
-      return res.status(500).json({ message: "Can't prase to json" });
-    }
-    if (highestIdComment_json == null) {
-      return res.status(500).json({ message: "No history" });
-    }
+      // const time = String(DateTime)
+      console.log(comment);
+      const highestIdComment = await prisma.screening_comments.findFirst({
+        orderBy: {
+          id: "desc",
+        },
+        select: { id: true },
+      });
+      console.log(highestIdComment?.id);
+      const highestIdComment_json = jsonRead(highestIdComment);
+      if (highestIdComment_json == undefined) {
+        return res.status(500).json({ message: "Can't prase to json" });
+      }
+      if (highestIdComment_json == null) {
+        return res.status(500).json({ message: "No history" });
+      }
 
       const newComment = await prisma.screening_comments.updateMany({
         where: {
@@ -322,47 +317,43 @@ router.get(
           status: "finish",
         },
       });
-      res.json({ idLog: jsonRead(highestIdComment?.id), comment: `Comment complete Comment:${comment} child_id: ${req.params.child_id}` });
+      res.json({
+        idLog: jsonRead(highestIdComment?.id),
+        comment: `Comment complete Comment:${comment} child_id: ${req.params.child_id}`,
+      });
     } catch (error) {
       console.log(error);
       res.status(500).json({
         error: `An error occurred while creating the screening comment. ${error}`,
       });
     }
-
-   
   }
 );
 // "/analyze_send/:user_id/:child_id/:score/:information",
 router.get(
   "/get-child-info/:child_id",
   async function (req: Request, res: Response, next: NextFunction) {
-    try{
+    try {
       const child_id = req.params.child_id;
       const child_info = await prisma.children.findMany({
         where: {
           id: parseInt(child_id),
         },
         include: {
-          child_developers: {
-            
-          },
-          child_pregnancies: {}
+          child_developers: {},
+          child_pregnancies: {},
         },
-
       });
       const child_info_json = jsonRead(child_info);
       if (child_info_json == undefined) {
         return res.status(500).json({ message: "Can't prase to json" });
       }
-      res.json({ child_info:  JSON.parse(child_info_json) });
-
-    }catch(error){
-      console.log(error)
+      res.json({ child_info: JSON.parse(child_info_json) });
+    } catch (error) {
+      console.log(error);
     }
-
   }
-)
+);
 router.get(
   "/analyze_send/:child_id/:score/:information/:user_id/:time_w_child/:relation",
   async function (req: Request, res: Response, next: NextFunction) {
@@ -390,7 +381,6 @@ router.get(
 
       const screening_comments = await prisma.screening_comments.create({
         data: {
-
           id: Number(id_table[0].id) + 1,
           time_w_child: time_w_child,
           relation: relation,
@@ -405,16 +395,18 @@ router.get(
           status: "pending",
         },
       });
+      const screening_info = `Send Child ${child_id} to doctor of this information ${information} score ${score}}`;
+      console.log(screening_info);
+      res.json({
+        screening_info: screening_info,
+        screening_id: Number(id_table_screening[0].id),
+      });
     } catch (error) {
       console.log(error);
       res.status(500).json({
         error: `An error occurred while creating the screening comment. ${error}`,
       });
     }
-
-    const screening_info = `Send Child ${child_id} to doctor of this information ${information} score ${score}}`;
-    console.log(screening_info);
-    res.json({ screening_info: screening_info });
   }
 );
 //create read doctor information
