@@ -447,4 +447,81 @@ router.get(
   }
 );
 
+router.get(
+  "/children-value",
+  async function (req: Request, res: Response, next: NextFunction) {
+    // สัดส่วน 2< 3> 4> 5> 6>> บุตร
+    var list = new Array();
+    let store_n_children: { [key: string]: number } = {
+      "บุตรคนเดียว": 0,
+      "2 คน": 0,
+      "3 คน": 0,
+      "4 คน": 0,
+      "5 คน": 0,
+      "6 คนขึ้นไป": 0,
+    };
+    let store_show: { [key: string]: string } = {
+      
+    };
+    let all: number = 0;
+    let all2: number = 0;
+    const now = new Date();
+    const year_now = now.getFullYear();
+    try {
+      const genders = await prisma.children
+        .findMany({
+          select: { number_child: true },
+        })
+        .then((data) => list.push(data));
+      const gender_json = jsonRead(genders);
+      console.log(list);
+      var count: number = 0;
+    
+      for (let i = 0; i < list[0].length; i++) {
+        var n_children;
+        n_children = list[0][i]["number_child"];
+        
+        count = count + 1;
+        if (list[0][i]["number_child"] == null) {
+          continue;
+        }
+      
+        if (list[0][i]["number_child"] != null) {
+          all2 = all2 + 1 || 1;
+          
+          // year_cal = year_now - n_children;
+
+          if (n_children == 1) {
+            store_n_children["บุตรคนเดียว"] = store_n_children["บุตรคนเดียว"] + 1 || 1;
+          } else if (n_children == 2) {
+            store_n_children["2 คน"] = store_n_children["2 คน"] + 1 || 1;
+          }
+          else if (n_children == 3) {
+            store_n_children["3 คน"] = store_n_children["3 คน"] + 1 || 1;
+          }
+          else if (n_children == 4) {
+            store_n_children["4 คน"] = store_n_children["4 คน"] + 1 || 1;
+          }
+          else if (n_children == 5) {
+            store_n_children["5 คน"] = store_n_children["5 คน"] + 1 || 1;
+          }
+          else if (n_children > 5) {
+            store_n_children["6 คนขึ้นไป"] = store_n_children["6 คนขึ้นไป"] + 1 || 1;
+          }
+        }
+      }
+      all = count;
+      
+      if (gender_json == undefined) {
+        return res.status(500).json({ message: "Can't prase to json" });
+      }
+      res.json({ data: store_n_children, all_user: all, all_user_haveData: all2 });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        error: `An error occurred while creating the screening comment. ${error}`,
+      });
+    }
+  }
+);
 export default router;
