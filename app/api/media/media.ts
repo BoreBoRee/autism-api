@@ -41,7 +41,45 @@ router.post('/upload/:screening_id', upload.single('image'), async (req: Request
     });
     return res.send({ success: true, filename: req.file.filename });}
 });
-
+router.post('/upload-child/:children_id', upload.single('image'), async (req: Request, res: Response) => {
+  const children_id = req.params.children_id;
+  if (!req.file) {
+    res.status(400).send('No file uploaded');
+    return res.send({ success: false });
+  }
+  else {
+    console.log("file received",req.file);
+    const uploadedFile = await prisma.children.updateMany({
+      where: {
+        
+        id: Number(children_id),
+      },
+      data: {
+        image_file_name: req.file.filename,
+      },
+    });
+    return res.send({ success: true, filename: req.file.filename });}
+});
+router.post('/upload-child/:user_id', upload.single('image'), async (req: Request, res: Response) => {
+  const user_id = req.params.user_id;
+  if (!req.file) {
+    res.status(400).send('No file uploaded');
+    return res.send({ success: false });
+  }
+  else {
+    console.log("file received",req.file);
+    const uploadedFile = await prisma.users.updateMany({
+      where: {
+        
+        id: Number(user_id),
+      },
+      //
+      data: {
+        image_file_name: req.file.filename,
+      },
+    });
+    return res.send({ success: true, filename: req.file.filename });}
+});
 router.get('/uploads/:fileimage', async (req: Request, res: Response) => {
   var filepath = path.resolve('./././images', req.params.fileimage);
   filepath = filepath.replace(/\.[%/.]+$/, ".webp");

@@ -312,6 +312,7 @@ model users {
   email_id         String?    @db.VarChar
   user_contact     String?    @db.VarChar
   birthday         DateTime?
+  image_file_name  String?    @db.VarChar
   created_at       DateTime   @default(now()) @db.Timestamp(6)
   updated_at       DateTime   @default(now())  @db.Timestamp(6)
   children         children[]
