@@ -60,7 +60,7 @@ router.post('/upload-child/:children_id', upload.single('image'), async (req: Re
     });
     return res.send({ success: true, filename: req.file.filename });}
 });
-router.post('/upload-child/:user_id', upload.single('image'), async (req: Request, res: Response) => {
+router.post('/upload-user/:user_id', upload.single('image'), async (req: Request, res: Response) => {
   const user_id = req.params.user_id;
   if (!req.file) {
     res.status(400).send('No file uploaded');
