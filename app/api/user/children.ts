@@ -37,6 +37,7 @@ router.get(
         select: {
           comment: true,
           screening_score: true,
+          information:true,
         },
       });
 

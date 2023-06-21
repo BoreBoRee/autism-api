@@ -31,34 +31,6 @@ router.get(
     }
   }
 );
-// router.get(
-//   "/analyze-children/finish",
-//   async function (req: Request, res: Response, next: NextFunction) {
-//     const screening_comments = await prisma.screening_comments.findMany({
-//       where: {
-//         status: "finish",
-//       },
-//       include: {
-//         screenings: {
-//           include: {
-//             children: {
-//               include: {
-//                 users: { select: { id: true, username: true } },
-//               },
-//             },
-//           },
-//         },
-//       },
-//     });
-//     console.log(screening_comments);
-//     const screening_comments_json = jsonRead(screening_comments);
-//     if (screening_comments_json == undefined) {
-//       return res.status(500).json({ message: "Can't prase to json" });
-//     }
-//     console.log(screening_comments.filter);
-//     res.json({ users: JSON.parse(screening_comments_json) });
-//   }
-// );
 router.get(
   "/analyze-pending-list-user-finish/:user_id",
   async function (req: Request, res: Response, next: NextFunction) {
@@ -395,7 +367,7 @@ router.get(
           status: "pending",
         },
       });
-      const screening_info = `Send Child ${child_id} to doctor of this information ${information} score ${score}}`;
+      const screening_info = `Send Child ${child_id} to doctor of this information ${information} score ${score} screening ID: ${Number(id_table_screening[0].id)}`;
       console.log(screening_info);
       res.json({
         screening_info: screening_info,

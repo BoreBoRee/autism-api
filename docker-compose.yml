@@ -12,3 +12,5 @@ services:
     #   - UPLOADED_PATH=/app/api/media/images
     volumes:
       - ./images:/app/app/api/media/images
+      - ./images:/app/images
+      - ./app/api/media:/app/app/api/media
