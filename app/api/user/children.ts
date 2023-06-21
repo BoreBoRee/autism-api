@@ -306,5 +306,43 @@ router.get(
   }
   
 );
+router.get(
+  "delete-child/:child_id",
+  async function (req: Request, res: Response, next: NextFunction) {
+    const child_id = req.params.child_id;
+    try {
+      const delete_child = await prisma.children.delete({
+        where: {
+          id: Number(child_id),
+        },
+      });
+      const delete_child_developers = await prisma.child_developers.deleteMany({
+        where: {
+          child_id: Number(child_id),
+        },
+      });
+      const delete_child_pregnancies = await prisma.child_pregnancies.deleteMany(
+        {
+          where: {
+            child_id: Number(child_id),
+          },
+        }
+      );
+      const delete_child_screenings = await prisma.screening_comments.deleteMany({
+        where: {
+          child_id: Number(child_id),
+        },
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+
+        error: `An error occurred while deleting child_id ${child_id}. ${error}`,
+      });
+    }
+    res.json({ Status: `Delete child success information` });
+  }
+);
+
 
 export default router;
