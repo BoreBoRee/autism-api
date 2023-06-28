@@ -19,21 +19,14 @@ router.get(
       var count = 0;
 
       const user = await prisma.users.findMany().then((data) => (count = data.length));
-      const user_update = await prisma.users.findFirst({
-        orderBy: {
-          created_at: "desc",
-        },
-        select: {created_at: true}
-      });
-      user_quantity = user;
+      user_quantity = user;;
       console.log(user);
       const allUserJson = jsonRead(user);
-      const user_update_json = jsonRead(user_update?.created_at);
-      if (allUserJson == undefined || user_update_json == undefined) {
+      if (allUserJson == undefined) {
         return res.status(500).json({ message: "Can't prase to json" });
       }
       console.log(user);
-      res.json({ users: user_quantity, time: JSON.parse(user_update_json)});
+      res.json({ users: user_quantity });
     }
     catch (error) {
       console.log(error);
@@ -220,6 +213,65 @@ router.get(
 );
 
 router.get(
+  "/adminSSO-login/:uid/:username/:email/:birthdate",
+  async function (req: Request, res: Response, next: NextFunction) {
+    try {
+      var user_json = JSON.parse("{}");
+      const username = req.params.username;
+      const uid = req.params.uid;
+      const birthdate = req.params.birthdate;
+      const birthday = new Date(birthdate);
+      const email = "email";
+      const provider = "email";
+      var userStatus = "";
+      var addUser = "";
+      const user = await prisma.users.findMany({
+        where: { email_id: uid },
+      });
+
+      user_json = jsonRead(user);
+      if (user_json != "[]") {
+        userStatus = "exist";
+        addUser = `login with uid ${uid}`;
+      } else {
+        userStatus = "not exist";
+        const adduser = await prisma.users.create({
+          data: {
+            user_contact: email,
+            username: username,
+            email_id: uid,
+            role_id: 3,
+            birthday: birthday,
+          },
+        });
+        const user = await prisma.users.findMany({
+          where: { email_id: uid },
+        });
+        user_json = jsonRead(user);
+        addUser = `add ${uid} into database`;
+        if (user_json == undefined) {
+          return res.status(500).json({ message: "Can't prase to json" });
+        }
+      }
+      console.log(user);
+      res.json({
+        users: JSON.parse(user_json),
+        userStatus: { userStatus },
+        addUser: { addUser },
+        provider: { provider },
+        
+      });
+    }
+    catch (error) {
+      console.log(error);
+      res.status(500).json({
+
+        error: `An error occurred while creating the screening comment. ${error}`,
+      });
+    }
+  }
+);
+router.get(
   "/delete-user/:uid/:provider",
   async function (req: Request, res: Response, next: NextFunction) {
     try {
@@ -296,6 +348,7 @@ router.get(
     }
   }
 );
+
 router.get(
   "/doctor-login/:uid/:username/:email/:birthdate",
   async function (req: Request, res: Response, next: NextFunction) {
@@ -319,14 +372,6 @@ router.get(
         addUser = `login with uid ${uid}`;
       } else {
         userStatus = "not exist";
-        // const user = await prisma.users.findMany({
-        //   where: { email_id: uid },
-        // });
-        // user_json = jsonRead(user);
-        // addUser = `add ${uid} into database`;
-        // if (user_json == undefined) {
-        //   return res.status(500).json({ message: "Can't prase to json" });
-        // }
       }
       console.log(user);
       res.json({
@@ -346,5 +391,57 @@ router.get(
     }
   }
 );
+
+router.get(
+  "/give-access/:role/:username/:email",
+  async function (req: Request, res: Response, next: NextFunction) {
+    try {
+      var user_json = JSON.parse("{}");
+      const username = req.params.username;
+      const role:String = req.params.role;
+      const email = req.params.email;
+
+      var userStatus = "";
+      var addUser = "";
+      // const user = await prisma.users.findMany({
+      //   where: { user_contact: email, username:username },
+      // });
+      if (role == '2'){
+        const user = await prisma.users.updateMany({
+          where:{user_contact: email},
+          data:{role_id: Number(role)}
+        });
+        userStatus = `Add role to user ${email} to role staff`
+      }
+      else if (role == '3'){
+        const user = await prisma.users.updateMany({
+          where:{user_contact: email},
+          data:{role_id: Number(role)}
+        });
+        userStatus = `Add role to user ${email} to role admin`
+      }
+      else {
+        userStatus = `Any Error role couldn't update`
+      }
+        
+      // console.log(user);
+      res.json({
+        users: JSON.parse(user_json),
+        userStatus: { userStatus },
+        addUser: { addUser },
+        
+        
+      });
+    }
+    catch (error) {
+      console.log(error);
+      res.status(500).json({
+
+        error: `Update role error. ${error}`,
+      });
+    }
+  }
+);
+
 
 export default router;
