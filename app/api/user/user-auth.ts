@@ -240,7 +240,7 @@ router.get(
             user_contact: email,
             username: username,
             email_id: uid,
-            role_id: 3,
+            role_id: 5,
             birthday: birthday,
           },
         });
@@ -267,6 +267,52 @@ router.get(
       res.status(500).json({
 
         error: `An error occurred while creating the screening comment. ${error}`,
+      });
+    }
+  }
+);
+router.get(
+  "/adminSSO-pending",
+  async function (req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = await prisma.users.findMany({
+        where: { role_id: 5 },
+      });
+      const user_json = jsonRead(user);
+      if (user_json == undefined) {
+        return res.status(500).json({ message: "Can't prase to json" });
+      }
+      res.json({
+        users: JSON.parse(user_json),
+      });
+    }
+    catch (error) {
+      console.log(error);
+      res.status(500).json({
+         error: `An error occurred while Getting SSOLogin Accout. ${error}`,
+      });
+    }
+  }
+)
+router.get(
+  "/adminInsystem",
+  async function (req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = await prisma.users.findMany({
+        where: { role_id: 2 },
+      });
+      const user_json = jsonRead(user);
+      if (user_json == undefined) {
+        return res.status(500).json({ message: "Can't prase to json" });
+      }
+      res.json({
+        users: JSON.parse(user_json),
+      });
+    }
+    catch (error) {
+      console.log(error);
+      res.status(500).json({
+          error: `An error occurred while Getting SSOLogin Doctor Accout. ${error}`,
       });
     }
   }
