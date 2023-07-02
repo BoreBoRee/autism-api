@@ -17,8 +17,14 @@ router.get(
     try {
       var user_quantity = 0;
       var count = 0;
-
+      var time: Date;
       const user = await prisma.users.findMany().then((data) => (count = data.length));
+      time = await prisma.users.findMany({
+
+          select: {created_at: true},
+          orderBy: {created_at: 'desc'},
+          take: 1,
+    }).then((data) => (time = data[0].created_at));
       user_quantity = user;;
       console.log(user);
       const allUserJson = jsonRead(user);
@@ -26,7 +32,7 @@ router.get(
         return res.status(500).json({ message: "Can't prase to json" });
       }
       console.log(user);
-      res.json({ users: user_quantity });
+      res.json({ users: user_quantity, time:time });
     }
     catch (error) {
       console.log(error);
