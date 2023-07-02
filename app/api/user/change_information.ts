@@ -13,19 +13,27 @@ router.get(
     "/change-info/:user_id/:username/:birthdate",
     async function (req: Request, res: Response, next: NextFunction) {
         const username = req.params.username;
-            const birthdate = req.params.birthdate;
+        const birthdate = req.params.birthdate;
+        var birthdateParam ;
+        if (birthdate == "null"){
+            birthdateParam = null;
+        }
+        else {
+            birthdateParam = new Date(birthdate);
+        }    
         try {
            
             const user_id = req.params.user_id;
             const update_user = await prisma.users.update({
                 where: { id: Number(user_id) },
-                data: { birthday:new Date(birthdate), username: username },
+                data: { birthday:  birthdateParam, username: username },
             }).then((data) => console.log(data));
+            console.log(`update user complete Username:${username} birthdate:${birthdate}`)
         }
         catch (error) {
             console.log(error);
             res.status(500).json({
-                error: `An error occurred while creating the screening comment. ${error}`,
+                error: `Error Updateing user information. ${error}`,
             });
         }
         res.json({ message: "update success", updateinfo:`${username} ${birthdate}`});

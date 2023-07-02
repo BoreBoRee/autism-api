@@ -221,10 +221,17 @@ router.get(
       const uid = req.params.uid;
       const birthdate = req.params.birthdate;
       const birthday = new Date(birthdate);
-      const email = "email";
+      const email = req.params.email;
       const provider = "email";
       var userStatus = "";
       var addUser = "";
+      const id_table = await prisma.screening_comments.findMany({
+        where: {},
+        select: { id: true },
+        orderBy: { id: "desc" },
+        take: 1,
+      });
+
       const user = await prisma.users.findMany({
         where: { email_id: uid },
       });
@@ -237,6 +244,7 @@ router.get(
         userStatus = "not exist";
         const adduser = await prisma.users.create({
           data: {
+            // id: Number(id_table[0].id) + 1,
             user_contact: email,
             username: username,
             email_id: uid,
@@ -404,7 +412,7 @@ router.get(
       const uid = req.params.uid;
       const birthdate = req.params.birthdate;
 
-      const email = "email";
+      const email = req.params.email;
       const provider = "email";
       var userStatus = "";
       var addUser = "";
@@ -454,7 +462,7 @@ router.get(
       // });
       if (role == '2'){
         const user = await prisma.users.updateMany({
-          where:{user_contact: email},
+          where:{user_contact: email, username:username},
           data:{role_id: Number(role)}
         });
         userStatus = `Add role to user ${email} to role staff`
@@ -472,6 +480,7 @@ router.get(
         
       // console.log(user);
       res.json({
+        status:'success',
         users: JSON.parse(user_json),
         userStatus: { userStatus },
         addUser: { addUser },
