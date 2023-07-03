@@ -307,7 +307,7 @@ router.get(
   
 );
 router.get(
-  "delete-child/:child_id",
+  "/delete-child/:child_id",
   async function (req: Request, res: Response, next: NextFunction) {
     const child_id = req.params.child_id;
     try {
