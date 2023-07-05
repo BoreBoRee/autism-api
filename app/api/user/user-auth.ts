@@ -332,6 +332,55 @@ router.get(
   }
 );
 router.get(
+  "/adminInsystem-1",
+  async function (req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = await prisma.users.findMany({
+        where: { role_id: {in: [2,3,5]}  },
+        
+      });
+      const user_json = jsonRead(user);
+      if (user_json == undefined) {
+        return res.status(500).json({ message: "Can't prase to json" });
+      }
+      res.json({
+        users: JSON.parse(user_json),
+      });
+    }
+    catch (error) {
+      console.log(error);
+      res.status(500).json({
+          error: `An error occurred while Getting SSOLogin Doctor Accout. ${error}`,
+      });
+    }
+  }
+);
+router.get(
+  "/find-user/:email",
+  async function (req: Request, res: Response, next: NextFunction) {
+    const email = req.params.email;
+    try {
+      const user = await prisma.users.findMany({
+        where: { user_contact: email  },
+        
+      });
+      const user_json = jsonRead(user);
+      if (user_json == undefined) {
+        return res.status(500).json({ message: "Can't prase to json" });
+      }
+      res.json({
+        users: JSON.parse(user_json),
+      });
+    }
+    catch (error) {
+      console.log(error);
+      res.status(500).json({
+          error: `An error occurred while Getting SSOLogin Doctor Accout. ${error}`,
+      });
+    }
+  }
+);
+router.get(
   "/delete-user/:uid/:provider",
   async function (req: Request, res: Response, next: NextFunction) {
     try {
@@ -466,23 +515,24 @@ router.get(
       // const user = await prisma.users.findMany({
       //   where: { user_contact: email, username:username },
       // });
-      if (role == '2'){
         const user = await prisma.users.updateMany({
           where:{user_contact: email, username:username},
           data:{role_id: Number(role)}
         });
-        userStatus = `Add role to user ${email} to role staff`
-      }
-      else if (role == '3'){
-        const user = await prisma.users.updateMany({
-          where:{user_contact: email},
-          data:{role_id: Number(role)}
-        });
-        userStatus = `Add role to user ${email} to role admin`
-      }
-      else {
-        userStatus = `Any Error role couldn't update`
-      }
+        // userStatus = `Add role to user ${email} to role staff`
+      // if (role == '2'){
+      
+      // }
+      // else if (role == '3'){
+      //   const user = await prisma.users.updateMany({
+      //     where:{user_contact: email},
+      //     data:{role_id: Number(role)}
+      //   });
+      //   userStatus = `Add role to user ${email} to role admin`
+      // }
+      // else {
+      //   userStatus = `Any Error role couldn't update`
+      // }
         
       // console.log(user);
       res.json({
