@@ -10,7 +10,6 @@ var app = express();
 app.use(cors());
 const prisma = new PrismaClient();
 
-
 router.get(
   "/user/all",
   async function (req: Request, res: Response, next: NextFunction) {
@@ -18,26 +17,27 @@ router.get(
       var user_quantity = 0;
       var count = 0;
       var time: Date;
-      const user = await prisma.users.findMany().then((data) => (count = data.length));
-      time = await prisma.users.findMany({
-
-          select: {created_at: true},
-          orderBy: {created_at: 'desc'},
+      const user = await prisma.users
+        .findMany()
+        .then((data) => (count = data.length));
+      time = await prisma.users
+        .findMany({
+          select: { created_at: true },
+          orderBy: { created_at: "desc" },
           take: 1,
-    }).then((data) => (time = data[0].created_at));
-      user_quantity = user;;
+        })
+        .then((data) => (time = data[0].created_at));
+      user_quantity = user;
       console.log(user);
       const allUserJson = jsonRead(user);
       if (allUserJson == undefined) {
         return res.status(500).json({ message: "Can't prase to json" });
       }
       console.log(user);
-      res.json({ users: user_quantity, time:time });
-    }
-    catch (error) {
+      res.json({ users: user_quantity, time: time });
+    } catch (error) {
       console.log(error);
       res.status(500).json({
-
         error: `An error occurred while creating the screening comment. ${error}`,
       });
     }
@@ -90,11 +90,9 @@ router.get(
         addUser: { addUser },
         provider: { provider },
       });
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error);
       res.status(500).json({
-
         error: `An error occurred while creating the screening comment. ${error}`,
       });
     }
@@ -147,11 +145,9 @@ router.get(
         addUser: { addUser },
         provider: { provider },
       });
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error);
       res.status(500).json({
-
         error: `An error occurred while creating the screening comment. ${error}`,
       });
     }
@@ -205,13 +201,10 @@ router.get(
         userStatus: { userStatus },
         addUser: { addUser },
         provider: { provider },
-        
       });
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error);
       res.status(500).json({
-
         error: `An error occurred while creating the screening comment. ${error}`,
       });
     }
@@ -273,13 +266,10 @@ router.get(
         userStatus: { userStatus },
         addUser: { addUser },
         provider: { provider },
-        
       });
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error);
       res.status(500).json({
-
         error: `An error occurred while creating the screening comment. ${error}`,
       });
     }
@@ -299,15 +289,14 @@ router.get(
       res.json({
         users: JSON.parse(user_json),
       });
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error);
       res.status(500).json({
-         error: `An error occurred while Getting SSOLogin Accout. ${error}`,
+        error: `An error occurred while Getting SSOLogin Accout. ${error}`,
       });
     }
   }
-)
+);
 router.get(
   "/adminInsystem",
   async function (req: Request, res: Response, next: NextFunction) {
@@ -322,11 +311,10 @@ router.get(
       res.json({
         users: JSON.parse(user_json),
       });
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error);
       res.status(500).json({
-          error: `An error occurred while Getting SSOLogin Doctor Accout. ${error}`,
+        error: `An error occurred while Getting SSOLogin Doctor Accout. ${error}`,
       });
     }
   }
@@ -336,8 +324,7 @@ router.get(
   async function (req: Request, res: Response, next: NextFunction) {
     try {
       const user = await prisma.users.findMany({
-        where: { role_id: {in: [2,3,5]}  },
-        
+        where: { role_id: { in: [2, 3, 5] } },
       });
       const user_json = jsonRead(user);
       if (user_json == undefined) {
@@ -346,11 +333,10 @@ router.get(
       res.json({
         users: JSON.parse(user_json),
       });
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error);
       res.status(500).json({
-          error: `An error occurred while Getting SSOLogin Doctor Accout. ${error}`,
+        error: `An error occurred while Getting SSOLogin Doctor Accout. ${error}`,
       });
     }
   }
@@ -361,8 +347,7 @@ router.get(
     const email = req.params.email;
     try {
       const user = await prisma.users.findMany({
-        where: { user_contact: email  },
-        
+        where: { user_contact: email },
       });
       const user_json = jsonRead(user);
       if (user_json == undefined) {
@@ -371,11 +356,10 @@ router.get(
       res.json({
         users: JSON.parse(user_json),
       });
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error);
       res.status(500).json({
-          error: `An error occurred while Getting SSOLogin Doctor Accout. ${error}`,
+        error: `An error occurred while Getting SSOLogin Doctor Accout. ${error}`,
       });
     }
   }
@@ -408,11 +392,9 @@ router.get(
           .then(console.log);
       }
       res.json({ delete_user: { uid }, provider: { provider } });
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error);
       res.status(500).json({
-
         error: `An error occurred while creating the screening comment. ${error}`,
       });
     }
@@ -425,15 +407,15 @@ router.get(
     try {
       const getID = await prisma.users.findMany({
         select: {
-          id: true
+          id: true,
         },
         orderBy: {
-          id: 'desc'
+          id: "desc",
         },
-        take: 1
-      })
+        take: 1,
+      });
       const getID_json = jsonRead(getID);
-      const ID = Number(getID[0]['id']) + 1
+      const ID = Number(getID[0]["id"]) + 1;
       if (getID_json == undefined) {
         return res.status(500).json({ message: "Can't prase to json" });
       }
@@ -445,13 +427,12 @@ router.get(
       });
       res.json({
         status: "guest Login",
-        guestName: `Guest#${ID}`, guestID: ID
+        guestName: `Guest#${ID}`,
+        guestID: ID,
       });
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error);
       res.status(500).json({
-
         error: `An error occurred while creating the screening comment. ${error}`,
       });
     }
@@ -488,13 +469,10 @@ router.get(
         userStatus: { userStatus },
         addUser: { addUser },
         provider: { provider },
-        
       });
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error);
       res.status(500).json({
-
         error: `An error occurred while creating the screening comment. ${error}`,
       });
     }
@@ -507,7 +485,7 @@ router.get(
     try {
       var user_json = JSON.parse("{}");
       const username = req.params.username;
-      const role:String = req.params.role;
+      const role: String = req.params.role;
       const email = req.params.email;
 
       var userStatus = "";
@@ -515,44 +493,138 @@ router.get(
       // const user = await prisma.users.findMany({
       //   where: { user_contact: email, username:username },
       // });
-        const user = await prisma.users.updateMany({
-          where:{user_contact: email, username:username},
-          data:{role_id: Number(role)}
-        });
-        // userStatus = `Add role to user ${email} to role staff`
-      // if (role == '2'){
-      
-      // }
-      // else if (role == '3'){
-      //   const user = await prisma.users.updateMany({
-      //     where:{user_contact: email},
-      //     data:{role_id: Number(role)}
-      //   });
-      //   userStatus = `Add role to user ${email} to role admin`
-      // }
-      // else {
-      //   userStatus = `Any Error role couldn't update`
-      // }
-        
-      // console.log(user);
+      const user = await prisma.users.updateMany({
+        where: { user_contact: email, username: username },
+        data: { role_id: Number(role) },
+      });
+
       res.json({
-        status:'success',
+        status: "success",
         users: JSON.parse(user_json),
         userStatus: { userStatus },
         addUser: { addUser },
-        
-        
       });
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error);
       res.status(500).json({
-
         error: `Update role error. ${error}`,
       });
     }
   }
 );
 
+router.get(
+  "/create-doctor-info/:user_id/:name/:surname/:hospital_id",
+  async function (req: Request, res: Response, next: NextFunction) {
+    const user_id = req.params.user_id;
+    const name = req.params.name;
+    const surname = req.params.surname;
+    const hospital_id = req.params.hospital_id;
+    try {
+      const findDoctor = await prisma.doctors.findMany({
+        where: { user_id: Number(user_id) },
+      });
+      const getID = await prisma.doctors.findMany({
+        select: {
+          id: true,
+        },
+        orderBy: {
+          id: "desc",
+        },
+        take: 1,
+      });
+      const getID_json = jsonRead(getID);
+      const ID = Number(getID[0]["id"]) + 1;
+      // var user_json = JSON.parse("{}");
+      const email = req.params.email;
+      const findDoctor_json = jsonRead(findDoctor);
+
+      console.log(findDoctor_json);
+      var doctor;
+
+      if (findDoctor_json == "[]") {
+        console.log("create");
+        doctor = await prisma.doctors.create({
+          data: {
+            id: ID,
+            first_name: name,
+            last_name: surname,
+            hospital_id: Number(hospital_id),
+            user_id: Number(user_id),
+          },
+        });
+        const user_json = jsonRead(doctor);
+      } else {
+        doctor = await prisma.doctors.updateMany({
+          where: { user_id: Number(user_id) },
+          data: {
+            first_name: name,
+            last_name: surname,
+            hospital_id: Number(hospital_id),
+          },
+        });
+      }
+
+      const doctor_json = jsonRead(doctor) ?? "Error";
+      res.json({
+        status: "?",
+        users: JSON.parse(doctor_json),
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({});
+    }
+  }
+);
+router.get(
+  "/get-doctor/:user_id",
+  async function (req: Request, res: Response, next: NextFunction) {
+    const user_id = req.params.user_id;
+
+    try {
+      const email = req.params.email;
+      const doctor = await prisma.doctors
+        .findFirst({
+          where: { user_id: Number(user_id) },
+        })
+        .catch((err) => {
+          err = "can't found doctor";
+        });
+      var doctor_json = jsonRead(doctor) ?? "Error";
+
+      var status;
+      doctor_json != null
+        ? (status = "can't found doctor")
+        : (status = "found doctor");
+      // console.log(doctor_json);
+      res.json({
+        status: status,
+        users: JSON.parse(doctor_json),
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({});
+    }
+  }
+);
+router.get(
+  "/suspend-user/:user_id/:status",
+  async function (req: Request, res: Response, next: NextFunction) {
+    const status = req.params.status;
+    const user_id = req.params.user_id;
+    const user = await prisma.users.updateMany({
+      where: { id: Number(user_id) },
+      data: { suspend_status: Number(status) },
+    });
+    var banStatus;
+    Number(status) == 2
+      ? (banStatus = `Ban user ${user_id} `)
+      : (banStatus = `Unban user ${user_id}`);
+    res.json({
+      status: "success",
+      users: banStatus,
+    });
+  }
+);
 
 export default router;
