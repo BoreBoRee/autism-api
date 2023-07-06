@@ -490,9 +490,6 @@ router.get(
 
       var userStatus = "";
       var addUser = "";
-      // const user = await prisma.users.findMany({
-      //   where: { user_contact: email, username:username },
-      // });
       const user = await prisma.users.updateMany({
         where: { user_contact: email, username: username },
         data: { role_id: Number(role) },
@@ -500,14 +497,15 @@ router.get(
 
       res.json({
         status: "success",
-        users: JSON.parse(user_json),
-        userStatus: { userStatus },
-        addUser: { addUser },
+        // users: JSON.parse(user_json),
+        // userStatus: { userStatus },
+        // addUser: { addUser },
       });
     } catch (error) {
       console.log(error);
       res.status(500).json({
         error: `Update role error. ${error}`,
+        status: "error",
       });
     }
   }
