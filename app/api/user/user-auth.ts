@@ -342,6 +342,29 @@ router.get(
   }
 );
 router.get(
+  "/findUser/:user_id",
+  async function (req: Request, res: Response, next: NextFunction) {
+    const user_id = req.params.user_id;
+    try {
+      const user = await prisma.users.findMany({
+        where: { role_id: { in: [2, 3, 5] }, id:Number(user_id) },
+      });
+      const user_json = jsonRead(user);
+      if (user_json == undefined) {
+        return res.status(500).json({ message: "Can't prase to json" });
+      }
+      res.json({
+        users: JSON.parse(user_json),
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        error: `An error occurred while Getting SSOLogin Doctor Accout. ${error}`,
+      });
+    }
+  }
+);
+router.get(
   "/find-user/:email",
   async function (req: Request, res: Response, next: NextFunction) {
     const email = req.params.email;
