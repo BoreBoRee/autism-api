@@ -15,11 +15,17 @@ const storage = multer.diskStorage({
       const uploadPath = path.join(__dirname, '/images');
         cb(null, uploadPath);
     }, 
+    
     filename: (req, file, cb) => {
         cb(null, file.fieldname + '-' + Date.now() + '.' + path.extname(file.originalname) + 'jpg');
     }
 });
-const upload = multer({ storage });
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 5 * 1024 * 1024, // Set the maximum file size to 5 MB (5 MB = 5 * 1024 * 1024 bytes)
+  }
+});
 
 // File upload endpoint
 router.post('/upload/:screening_id', upload.single('image'), async (req: Request, res: Response) => {
@@ -35,7 +41,10 @@ router.post('/upload/:screening_id', upload.single('image'), async (req: Request
         
         screening_id: Number(screening_id),
       },
+      
+      
       data: {
+        
         image_file_name: req.file.filename,
       },
     });
