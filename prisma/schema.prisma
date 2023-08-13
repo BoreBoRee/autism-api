@@ -307,8 +307,8 @@ model users {
   username         String?    @db.VarChar
   crypted_password String?    @db.VarChar
 
-  role_id          BigInt?
-  suspend_status   BigInt?   
+  role_id          BigInt?    
+  suspend_status   BigInt?    @default(1)
   facebook_id      String?    @db.VarChar
   google_id        String?    @db.VarChar
   email_id         String?    @db.VarChar

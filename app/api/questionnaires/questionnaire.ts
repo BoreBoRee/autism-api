@@ -178,7 +178,11 @@ router.get(
   // 1028
   async function (req: Request, res: Response, next: NextFunction) {
     try {
+      
       const child_id = req.params.child_id;
+      if (child_id == undefined) {
+        return res.status(500).json({ message: "Can't prase to json" });
+      }
       const score = req.params.score;
       const n1 = req.params.n1;
       const n2 = req.params.n2;
