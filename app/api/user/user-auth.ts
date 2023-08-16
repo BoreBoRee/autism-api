@@ -581,8 +581,8 @@ router.get(
           doctor = await prisma.doctors.updateMany({
             where: { user_id: Number(user_id) },
             data: {
-              first_name: name != null ? name : {},
-              last_name: surname != null?  surname : {},
+              first_name: name != 'null' ? name : {},
+              last_name: surname != 'null'?  surname : {},
               hospital_id: hospital_id != "null" ? Number(hospital_id) : {},
             },
           });
