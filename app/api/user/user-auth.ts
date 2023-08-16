@@ -348,6 +348,7 @@ router.get(
     try {
       const user = await prisma.users.findMany({
         where: { role_id: { in: [2, 3, 5] }, id:Number(user_id) },
+        include: {doctors:true}
       });
       const user_json = jsonRead(user);
       if (user_json == undefined) {
