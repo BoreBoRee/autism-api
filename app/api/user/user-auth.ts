@@ -572,7 +572,7 @@ router.get(
             id: ID,
             first_name: name,
             last_name: surname,
-            hospital_id: Number(hospital_id),
+            hospital_id: (hospital_id != "null") ? Number(hospital_id) : null,
             user_id: Number(user_id),
           },
         });
