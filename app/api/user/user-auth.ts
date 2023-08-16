@@ -347,15 +347,14 @@ router.get(
     const user_id = req.params.user_id;
     try {
       const user = await prisma.users.findMany({
-        where: { role_id: { in: [2, 3, 5] }, id:Number(user_id) },
-        include: {doctors:true}
+        where: { role_id: { in: [2, 3, 5] }, id: Number(user_id) },
+        include: { doctors: true },
       });
       const user_json = jsonRead(user);
       if (user_json == undefined) {
         return res.status(500).json({ message: "Can't prase to json" });
       }
       res.json({
-        
         users: JSON.parse(user_json),
       });
     } catch (error) {
@@ -572,20 +571,30 @@ router.get(
             id: ID,
             first_name: name,
             last_name: surname,
-            hospital_id: (hospital_id != "null") ? Number(hospital_id) : null,
+            hospital_id: hospital_id != "null" ? Number(hospital_id) : null,
             user_id: Number(user_id),
           },
         });
         const user_json = jsonRead(doctor);
       } else {
-        doctor = await prisma.doctors.updateMany({
-          where: { user_id: Number(user_id) },
-          data: {
-            first_name: name,
-            last_name: surname,
-            hospital_id: Number(hospital_id),
-          },
-        });
+        if (hospital_id == "null") {
+          doctor = await prisma.doctors.updateMany({
+            where: { user_id: Number(user_id) },
+            data: {
+              first_name: name,
+              last_name: surname,
+            },
+          });
+        } else {
+          doctor = await prisma.doctors.updateMany({
+            where: { user_id: Number(user_id) },
+            data: {
+              first_name: name,
+              last_name: surname,
+              hospital_id: Number(hospital_id),
+            },
+          });
+        }
       }
 
       const doctor_json = jsonRead(doctor) ?? "Error";
