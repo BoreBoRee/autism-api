@@ -577,24 +577,17 @@ router.get(
         });
         const user_json = jsonRead(doctor);
       } else {
-        if (hospital_id == "null") {
+        
           doctor = await prisma.doctors.updateMany({
             where: { user_id: Number(user_id) },
             data: {
-              first_name: name,
-              last_name: surname,
+              first_name: name != null ? name : {},
+              last_name: surname != null?  surname : {},
+              hospital_id: hospital_id != "null" ? Number(hospital_id) : {},
             },
           });
-        } else {
-          doctor = await prisma.doctors.updateMany({
-            where: { user_id: Number(user_id) },
-            data: {
-              first_name: name,
-              last_name: surname,
-              hospital_id: Number(hospital_id),
-            },
-          });
-        }
+        
+        
       }
 
       const doctor_json = jsonRead(doctor) ?? "Error";
