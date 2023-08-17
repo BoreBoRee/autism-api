@@ -228,7 +228,7 @@ router.get(
       take: 1
     })
       var i;
-      for (i = 0; i <= 20; i++){
+      for (i = 1; i <= 21; i++){
         const get_ID_4create = await prisma.screening_details.findMany({
        
         select: {
@@ -239,16 +239,14 @@ router.get(
         },
         take:1 })
         console.log(Number(get_ID_4create[0].id ));
-        // const get_ID_4create_json = jsonRead(get_ID_4create);
-        // console.log(Number(get_ID_4create_json)+ 1);
         var get_ID_4create_Number = Number(get_ID_4create[0].id );
         console.log(get_ID_4create_Number);
       const screening_questions = await prisma.screening_details.create({
         data: {
           id: Number(get_ID_4create_Number) + 1,
-          screening_question_id: i + 1,
+          screening_question_id: i,
           screening_id: Number(get_chld_ID_4create[0].id ) ,
-          answered: list_answer[i] == "true" ? true : false,
+          answered: list_answer[i - 1] == "true" ? true : false,
         },
       });
       }
