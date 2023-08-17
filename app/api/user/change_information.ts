@@ -14,25 +14,12 @@ router.get(
     async function (req: Request, res: Response, next: NextFunction) {
         const username = req.params.username;
         const birthdate = req.params.birthdate;
-        const old = await prisma.users.findUnique({
-            where: { id: Number(req.params.user_id) },
-        });
-
-        var birthdateParam;
-        if (birthdate == "null"){
-            birthdateParam = old?.birthday;
-        }
-        if (username == "null"){
-            birthdateParam = old?.username;
-        }
-        else {
-            birthdateParam = new Date(birthdate);
-        }    
+         
         try {    
             const user_id = req.params.user_id;
             const update_user = await prisma.users.update({
                 where: { id: Number(user_id) },
-                data: { birthday:  birthdateParam, username: username },
+                data: { birthday:  birthdate != "null" ? birthdate : undefined, username:  username != "null" ? username : undefined },
             }).then((data) => console.log(data));
             console.log(`update user complete Username:${username} birthdate:${birthdate}`)
         }
