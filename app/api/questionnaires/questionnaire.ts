@@ -246,7 +246,7 @@ router.get(
       const screening_questions = await prisma.screening_details.create({
         data: {
           id: Number(get_ID_4create_Number) + 1,
-          screening_question_id: i,
+          screening_question_id: i + 1,
           screening_id: Number(get_chld_ID_4create[0].id ) ,
           answered: list_answer[i] == "true" ? true : false,
         },
