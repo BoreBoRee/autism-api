@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import e, { Request, Response, NextFunction } from "express";
 import { PrismaClient } from "@prisma/client";
 import jsonRead from '../json-read-format';
 
@@ -179,7 +179,17 @@ router.get(
   async function (req: Request, res: Response, next: NextFunction) {
     try {
       
-      const child_id = req.params.child_id;
+      var child_id = req.params.child_id;
+      try {
+        const childIdSave = Number(child_id);
+      }
+      catch (error) {
+        console.log(error);
+        res.status(500).json({ 
+          error: `Error Prase Int. ${error}`,
+        });
+        return;
+      }
       if (child_id == undefined) {
         return res.status(500).json({ message: "Can't prase to json" });
       }
@@ -207,7 +217,7 @@ router.get(
       var list_answer = [n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13, n14, n15, n16, n17, n18, n19, n20];
       const get_chld_ID_4create = await prisma.screenings.findMany({
         where: {
-          child_id: parseInt(child_id)
+          child_id: Number(child_id)
         },
       select: {
         id: true
@@ -238,7 +248,7 @@ router.get(
           id: Number(get_ID_4create_Number) + 1,
           screening_question_id: i,
           screening_id: Number(get_chld_ID_4create[0].id ) ,
-          answered: Boolean(Number(list_answer[i])),
+          answered: list_answer[i] == "true" ? true : false,
         },
       });
       }
