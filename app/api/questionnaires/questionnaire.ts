@@ -228,7 +228,7 @@ router.get(
       take: 1
     })
       var i;
-      for (i = 1; i <= 20; i++){
+      for (i = 0; i <= 20; i++){
         const get_ID_4create = await prisma.screening_details.findMany({
        
         select: {
