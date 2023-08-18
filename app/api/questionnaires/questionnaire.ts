@@ -193,6 +193,7 @@ router.get(
       if (child_id == undefined) {
         return res.status(500).json({ message: "Can't prase to json" });
       }
+      console.log(`Child ID: ${child_id}`);
       const score = req.params.score;
       const n1 = req.params.n1;
       const n2 = req.params.n2;
