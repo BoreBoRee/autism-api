@@ -180,8 +180,9 @@ router.get(
     try {
       
       var child_id = req.params.child_id;
+      var childIdSave;
       try {
-        const childIdSave = Number(child_id);
+        childIdSave = Number(child_id);
       }
       catch (error) {
         console.log(error);
@@ -218,7 +219,7 @@ router.get(
       var list_answer = [n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13, n14, n15, n16, n17, n18, n19, n20];
       const get_chld_ID_4create = await prisma.screenings.findMany({
         where: {
-          child_id: Number(child_id)
+          child_id: childIdSave
         },
       select: {
         id: true
