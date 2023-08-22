@@ -280,6 +280,7 @@ router.get(
           // user_id: parseInt(screening_id),
           child_id: parseInt(req.params.child_id),
           screening_id: parseInt(screening_id),
+          updated_at: Date.now().toString(),
         },
         data: {
           // id: parseInt(JSON.parse(highestIdComment_json)) + 1,
