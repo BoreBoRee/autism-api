@@ -18,6 +18,7 @@ COPY .env ./
 # COPY tsconfig.json file
 COPY tsconfig.json ./
 RUN npm install
+RUN npm install date-fns
 RUN npm install express
 RUN npm install @types/express
 RUN npm install --save-dev ts-node

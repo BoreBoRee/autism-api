@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { PrismaClient } from "@prisma/client";
 import jsonRead from "../json-read-format";
-
+import { format } from 'date-fns';
 const timestamp = Date.now();
 var express = require("express");
 var router = express.Router();
@@ -257,7 +257,8 @@ router.get(
     try {
       const comment = req.params.comment;
       const screening_id = req.params.screening;
-
+      const newDate = new Date(); 
+      const formattedDate = format(newDate, "yyyy-MM-dd'T'HH:mm:ss.SSSxxx");
       // const time = String(DateTime)
       console.log(comment);
       const highestIdComment = await prisma.screening_comments.findFirst({
@@ -280,7 +281,7 @@ router.get(
           // user_id: parseInt(screening_id),
           child_id: parseInt(req.params.child_id),
           screening_id: parseInt(screening_id),
-          updated_at: Date.now().toString(),
+          updated_at: formattedDate,
         },
         data: {
           // id: parseInt(JSON.parse(highestIdComment_json)) + 1,
