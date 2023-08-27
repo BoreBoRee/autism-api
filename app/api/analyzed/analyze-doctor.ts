@@ -166,23 +166,33 @@ router.get(
         },
       },
     });
-
     const screenings_json = jsonRead(screenings);
     const user_id_only_json = jsonRead(user_id_only);
-    console.log(user_id_only[0].user_id);
-    interface User {
-      name: string;
-      information: Record<string, unknown>;
+    console.log(`user id: ${user_id_only_json} `);
+    if (user_id_only_json == '[]'){
+      res.json({
+       Data: "No data"
+      });
+      return;
     }
+    else {
+    
+      console.log(user_id_only[0].user_id);
+      interface User {
+        name: string;
+        information: Record<string, unknown>;
+      }
+  
+      if (screenings_json == undefined || user_id_only_json == undefined) {
+        return res.status(500).json({ message: "Can't prase to json" });
+      }
+  
+      res.json({
+        screenings_json: JSON.parse(screenings_json),
+        userid: JSON.parse(user_id_only_json),
+      });}
 
-    if (screenings_json == undefined || user_id_only_json == undefined) {
-      return res.status(500).json({ message: "Can't prase to json" });
-    }
-
-    res.json({
-      screenings_json: JSON.parse(screenings_json),
-      userid: JSON.parse(user_id_only_json),
-    });
+    
   }
 );
 
@@ -214,20 +224,30 @@ router.get(
 
     const screenings_json = jsonRead(screenings);
     const user_id_only_json = jsonRead(user_id_only);
-    console.log(user_id_only[0].user_id);
-    interface User {
-      name: string;
-      information: Record<string, unknown>;
+    if (user_id_only_json == '[]'){
+      res.json({
+       Data: "No data"
+      });
+      return;
     }
+    else {
+      console.log(user_id_only[0].user_id);
+      interface User {
+        name: string;
+        information: Record<string, unknown>;
+      }
+  
+      if (screenings_json == undefined || user_id_only_json == undefined) {
+        return res.status(500).json({ message: "Can't prase to json" });
+      }
+  
+      res.json({
+        screenings_json: JSON.parse(screenings_json),
+        userid: JSON.parse(user_id_only_json),
+      });
 
-    if (screenings_json == undefined || user_id_only_json == undefined) {
-      return res.status(500).json({ message: "Can't prase to json" });
     }
-
-    res.json({
-      screenings_json: JSON.parse(screenings_json),
-      userid: JSON.parse(user_id_only_json),
-    });
+   
   }
 );
 
