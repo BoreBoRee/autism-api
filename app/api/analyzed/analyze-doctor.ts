@@ -190,6 +190,7 @@ router.get(
       res.json({
         screenings_json: JSON.parse(screenings_json),
         userid: JSON.parse(user_id_only_json),
+        Data: "Have data"
       });}
 
     
@@ -244,6 +245,7 @@ router.get(
       res.json({
         screenings_json: JSON.parse(screenings_json),
         userid: JSON.parse(user_id_only_json),
+        Data: "Have data"
       });
 
     }
