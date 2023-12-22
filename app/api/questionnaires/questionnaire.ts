@@ -221,7 +221,7 @@ router.get(
         res.json({
           helper: "เกิดปัญหาบางอย่างเกิดขึ้น ไม่สามารถบันทึกข้อมูลได้",
         });
-        return;
+      
       }
       const get_chld_ID_4create = await prisma.screenings.findMany({
         where: {
