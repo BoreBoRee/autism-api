@@ -217,6 +217,12 @@ router.get(
       const n19 = req.params.n19;
       const n20 = req.params.n20;
       var list_answer = [n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13, n14, n15, n16, n17, n18, n19, n20];
+      if (childIdSave == null || childIdSave == NaN){
+        res.json({
+          helper: "เกิดปัญหาบางอย่างเกิดขึ้น ไม่สามารถบันทึกข้อมูลได้",
+        });
+        return;
+      }
       const get_chld_ID_4create = await prisma.screenings.findMany({
         where: {
           child_id: childIdSave
