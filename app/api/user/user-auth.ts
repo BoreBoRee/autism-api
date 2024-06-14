@@ -153,7 +153,60 @@ router.get(
     }
   }
 );
+router.get(
+  "/apple-login/:uid/:username/:email/:birthdate",
+  async function (req: Request, res: Response, next: NextFunction) {
+    try {
+      var user_json = JSON.parse("{}");
+      const username = req.params.username;
+      const uid = req.params.uid;
+      const provider = "apple";
+      const email = req.params.email;
+      var userStatus = "";
+      var addUser = "";
+      const user = await prisma.users.findMany({
+        where: { apple_id: uid },
+      });
 
+      user_json = jsonRead(user);
+      if (user_json != "[]") {
+        userStatus = "exist";
+        addUser = `login with uid ${uid}`;
+      } else {
+        userStatus = "not exist";
+        const adduser = await prisma.users.create({
+          data: {
+            user_contact: email,
+            username: username,
+            apple_id: uid,
+            role_id: 1,
+            birthday: null,
+          },
+        });
+        const user = await prisma.users.findMany({
+          where: { apple_id: uid },
+        });
+        user_json = jsonRead(user);
+        addUser = `add ${uid} into database`;
+      }
+      if (user_json == undefined) {
+        return res.status(500).json({ message: "Can't prase to json" });
+      }
+      console.log(user);
+      res.json({
+        users: JSON.parse(user_json),
+        userStatus: { userStatus },
+        addUser: { addUser },
+        provider: { provider },
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        error: `An error occurred while creating the screening comment. ${error}`,
+      });
+    }
+  }
+);
 router.get(
   "/email-login/:uid/:username/:email/:birthdate",
   async function (req: Request, res: Response, next: NextFunction) {
