@@ -191,7 +191,7 @@ router.get(
         });
         return;
       }
-      if (child_id == undefined) {
+      if (child_id == undefined || child_id == null){
         return res.status(500).json({ message: "Can't prase to json" });
       }
       console.log(`Child ID: ${child_id}`);
